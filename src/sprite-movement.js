@@ -3,7 +3,7 @@ const ctx = canvas.getContext('2d');
 ctx.willReadFrequently = true;
 
 const sprite = new Image();
-sprite.src = 'sprite-facing.png'; // replace with your sprite image path
+sprite.src = '/src/sprite-facing.png'; // replace with your sprite image path
 
 const spriteWidth = 50;
 const spriteHeight = 50;
@@ -12,7 +12,7 @@ let spriteY = canvas.height / 2;
 const speed = 5;
 
 const townBackground = new Image();
-townBackground.src = 'autoduel_11.gif'; // replace with your town background image path
+townBackground.src = '/src/autoduel_11.gif'; // replace with your town background image path
 
 document.addEventListener('keydown', moveSprite);
 
