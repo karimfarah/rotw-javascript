@@ -12,7 +12,7 @@ let spriteY = canvas.height / 2;
 const speed = 5;
 
 const townBackground = new Image();
-townBackground.src = '/src/autoduel_11.gif'; // replace with your town background image path
+townBackground.src = '/src/denver.png'; // replace with your town background image path
 
 document.addEventListener('keydown', moveSprite);
 
