@@ -2,6 +2,16 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 ctx.willReadFrequently = true;
 
+// Set font and alignment
+ctx.font = '48px Arial';
+ctx.textAlign = 'center';
+
+// Set the position where you want to draw the text
+var titleX = canvas.width / 2;
+var titleY = canvas.height / 2;
+
+
+
 const sprite = new Image();
 sprite.src = '/src/sprite-facing.png';
 //sprite.src = '/src/img/male-character-sheet.png';
@@ -78,6 +88,8 @@ function draw() {
     ctx.drawImage(townBackground, 0, 0, canvas.width, canvas.height);
     ctx.drawImage(sprite, spriteX, spriteY, spriteWidth, spriteHeight);
     //ctx.drawImage(sprite, offsetPos.x, offsetPos.y, SPRITE_WIDTH, SPRITE_HEIGHT, spriteX, spriteY, spriteWidth, spriteHeight);
+    // Draw the text
+    ctx.fillText('DENVER', titleX, titleY);
     requestAnimationFrame(draw);
 }
 
