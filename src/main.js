@@ -135,7 +135,7 @@ function checkDenverLocations() {
     } else if(spriteX >= 380 && spriteY <= 420 &&
         spriteY <= 10) {
         /** NORTH EXIT **/
-        enterI25North(920, 4520);
+        enterI25North(1220, 4510);
     }
 }
 
@@ -162,7 +162,7 @@ function checkCheyenneLocations() {
         enterCheyenneRestStop();
     } else if(spriteX >= 380 && spriteX <= 420 &&
         spriteY >= 560) {
-        enterI25North(900, 100);
+        enterI25North(1200, 100);
     }
 }
 
@@ -184,7 +184,7 @@ function checkLasVegasLocations() {
 }
 
 function checkI25NorthLocations() {
-    if (cameraX >= 690 && cameraX <= 1100 &&
+    if (cameraX >= 990 && cameraX <= 1800 &&
         cameraY <= -10) {
 
         spriteX = 400;
@@ -193,6 +193,14 @@ function checkI25NorthLocations() {
         currentCity = City.CHEYENNE;
         townBackground.src= cheyenneBackground.src;
 
+    } else if (cameraX >= 990 && cameraX <= 1800 &&
+        cameraY >= 4530) {
+
+        spriteX = 400;
+        spriteY = 20;
+        currentRoad = Road.NONE;
+        currentCity = City.DENVER;
+        townBackground.src= denverBackground.src;
     }
 }
 
