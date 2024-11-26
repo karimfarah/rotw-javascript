@@ -50,6 +50,17 @@ const City = Object.freeze({
     NONE: 'none'
 });
 
+const Road = Object.freeze({
+    I25_NORTH: 'i25 north',
+    I25_SOUTH: 'i25 south',
+    I70_WEST: 'i70 west',
+    I70_EAST: 'i70 west',
+    I15_SOUTH: 'i15 north',
+    I15_NORTH: 'i15 south',
+    I84_NORTH: 'i84 north',
+    NONE: 'none'
+});
+
 const denverBackground = new Image();
 denverBackground.src = '/src/denver.png';
 
@@ -69,11 +80,9 @@ var currentCity = City.DENVER;
 
 /** STARTING ROAD ***/
 const roadBackground = new Image();
+var currentRoad = Road.NONE;
 var cameraX = 0;
 var cameraY = 0;
-const tileSize = 32;
-var mapWidthInTiles = canvas.width / tileSize;
-var mapHeightInTiles = canvas.height / tileSize;
 
 document.addEventListener('keydown', moveSprite);
 
@@ -119,44 +128,41 @@ function moveSprite(e) {
 }
 
 function checkDenverLocations() {
-    /** REST STOP **/
     if (spriteX >= 590 && spriteX <= 600 &&
         spriteY >= 260 && spriteY <= 280) {
+        /** REST STOP **/
         enterDenverRestStop();
     } else if(spriteX >= 380 && spriteY <= 420 &&
         spriteY <= 10) {
-        leaveForCheyenne();
+        /** NORTH EXIT **/
+        enterI25North(920, 4520);
     }
 }
 
-function leaveForCheyenne() {
+function enterI25North(camX, camY) {
     console.log('Leaving for Cheyenne');
 
-    roadBackground.src = '/src/img/i70-north.png';
-
-    cameraX = 1000;
-    cameraY = 4520;//5140;
-    spriteX = (canvas.width / 2);
-    spriteY = (canvas.height / 2);
-
-    currentCity = City.NONE;
-
+    roadBackground.src = '/src/img/i25-north.png';
     roadBackground.onload = function drawSelf() {
         draw();
     }
 
-    cameraX = 1000;
-    cameraY = 4520;//5140;
+    cameraX = camX;
+    cameraY = camY;//5140;
     spriteX = (canvas.width / 2);
     spriteY = (canvas.height / 2);
 
     currentCity = City.NONE;
+    currentRoad = Road.I25_NORTH;
 }
 
 function checkCheyenneLocations() {
     if (spriteX >= 470 && spriteX <= 480 &&
         spriteY >= 200 && spriteY <= 210) {
         enterCheyenneRestStop();
+    } else if(spriteX >= 380 && spriteX <= 420 &&
+        spriteY >= 560) {
+        enterI25North(900, 100);
     }
 }
 
@@ -177,20 +183,41 @@ function checkLasVegasLocations() {
     }
 }
 
+function checkI25NorthLocations() {
+    if (cameraX >= 690 && cameraX <= 1100 &&
+        cameraY <= -10) {
+
+        spriteX = 400;
+        spriteY = 550;
+        currentRoad = Road.NONE;
+        currentCity = City.CHEYENNE;
+        townBackground.src= cheyenneBackground.src;
+
+    }
+}
+
 function checkPlayerLocation() {
-    switch(currentCity) {
-        case City.DENVER:
-            checkDenverLocations();
-            break;
-        case City.CHEYENNE:
-            checkCheyenneLocations();
-            break;
-        case City.GRAND_JUNCTION:
-            checkGrandJunctionLocations();
-            break;
-        case City.LAS_VEGAS:
-            checkLasVegasLocations();
-            break;
+    if (currentRoad === Road.NONE) {
+        switch (currentCity) {
+            case City.DENVER:
+                checkDenverLocations();
+                break;
+            case City.CHEYENNE:
+                checkCheyenneLocations();
+                break;
+            case City.GRAND_JUNCTION:
+                checkGrandJunctionLocations();
+                break;
+            case City.LAS_VEGAS:
+                checkLasVegasLocations();
+                break;
+        }
+    } else {
+        switch (currentRoad) {
+            case Road.I25_NORTH:
+                checkI25NorthLocations();
+                break;
+        }
     }
 }
 
@@ -539,22 +566,16 @@ async function drawTransitionMenu() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // Large map tile scrolling vs single screen city map
     if(currentCity === City.NONE) {
-        //console.log('Drawing ' + roadBackground.src + ' from ' + cameraX + ', ' + cameraY);
         ctx.drawImage(roadBackground, cameraX, cameraY, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
-        //ctx.drawImage(roadBackground, 0, 0, canvas.width, canvas.height);
         ctx.drawImage(sprite, (canvas.width/2), (canvas.height/2), spriteWidth, spriteHeight);
     } else {
-        //console.log('Drawing ' + townBackground.src + ' sprite at ' + spriteX + ', ' + spriteY);
         ctx.drawImage(townBackground, 0, 0, canvas.width, canvas.height);
         ctx.drawImage(sprite, spriteX, spriteY, spriteWidth, spriteHeight);
 
         drawLocationMenu();
         drawTransitionMenu();
-
-        //ctx.drawImage(sprite, offsetPos.x, offsetPos.y, SPRITE_WIDTH, SPRITE_HEIGHT, spriteX, spriteY, spriteWidth, spriteHeight);
-        // Draw the text
-        //ctx.fillText('DENVER', titleX, titleY);
     }
 
     requestAnimationFrame(draw);
