@@ -12,6 +12,7 @@ var titleY = canvas.height / 2;
 
 var inRestStop = false;
 var inTransition = false;
+var inFactory = false;
 
 const sprite = new Image();
 sprite.src = '/src/sprite-facing.png';
@@ -27,6 +28,7 @@ const spriteHeight = 45;
 let spriteX = (canvas.width / 2) + 100;
 let spriteY = canvas.height / 2;
 const speed = 10;
+let playerMoney = 5000;
 //var offsetPos = spritePositionToImagePosition(1, 0);
 
 /**** CITY CONSTANT IMAGES ****/
@@ -132,6 +134,10 @@ function checkDenverLocations() {
         spriteY >= 260 && spriteY <= 280) {
         /** REST STOP **/
         enterDenverRestStop();
+    } else if(spriteX >= 160 && spriteX <= 240 &&
+        spriteY >= 360 && spriteY <= 380) {
+        /** FACTORY **/
+        enterDenverFactory();
     } else if(spriteX >= 380 && spriteY <= 420 &&
         spriteY <= 10) {
         /** NORTH EXIT **/
@@ -234,7 +240,148 @@ function enterDenverRestStop() {
     console.log("Entering Rest Stop");
     document.removeEventListener('keydown', moveSprite)
     document.addEventListener('keydown', readDenverRestStopInput);
+    canvas.addEventListener('click', handleCanvasClick);
     inRestStop = true;
+}
+
+function enterDenverFactory() {
+    console.log("Entering Factory");
+    document.removeEventListener('keydown', moveSprite)
+    //document.addEventListener('click', readDenverFactoryInput);
+    document.addEventListener('click', handleCanvasClick);
+    document.addEventListener('keydown', handleKeyDown);
+    inFactory = true;
+}
+
+const options = ['Option 1', 'Option 2', 'Option 3'];
+let dropdownVisible = false;
+let selectedOption = null;
+const inputBox = { x: 325, y: 205, width: 200, height: 30 };
+const cancelBox = { x: 450, y: 500, width: 100, height: 30 };
+const saveBox = { x: 600, y: 500, width: 100, height: 30 };
+let carNameText = '';
+let inputActive = false;
+
+function handleKeyDown(event) {
+    if (inputActive) {
+        if (event.key === 'Backspace') {
+            carNameText = carNameText.slice(0, -1);
+        }
+
+        if(carNameText.length > 16) {
+            return;
+        }
+
+        if (event.key.length === 1) {
+            carNameText += event.key;
+        }
+        drawInputBox();
+    }
+}
+
+function handleCanvasClick(event) {
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    // Check if the click is inside the input box
+    if (x >= inputBox.x && x <= inputBox.x + inputBox.width && y >= inputBox.y && y <= inputBox.y + inputBox.height) {
+        inputActive = true;
+    } else {
+        inputActive = false;
+    }
+
+    // leave the factory
+    if (x >= cancelBox.x && x <= cancelBox.x + cancelBox.width && y >= cancelBox.y && y <= cancelBox.y + cancelBox.height) {
+        inFactory = false;
+        spriteY -= 40;
+        document.removeEventListener('click', handleCanvasClick);
+        document.removeEventListener('keydown', handleKeyDown);
+        document.addEventListener('keydown', moveSprite);
+    }
+
+    if (x >= saveBox.x && x <= saveBox.x + saveBox.width && y >= saveBox.y && y <= saveBox.y + saveBox.height) {
+
+    }
+
+    //drawInputBox();
+}
+
+function drawInputBox() {
+    ctx.fillStyle = '#EEEEEE';
+    ctx.fillRect(inputBox.x, inputBox.y, inputBox.width, inputBox.height);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'green';
+    ctx.strokeRect(inputBox.x, inputBox.y, inputBox.width, inputBox.height);
+    ctx.fillStyle = 'green';
+    ctx.font = '16px Arial';
+    ctx.fillText(carNameText, inputBox.x + 25, inputBox.y + 20);
+}
+
+function drawButtons() {
+    ctx.fillStyle = '#999999';
+    ctx.fillRect(cancelBox.x, cancelBox.y, cancelBox.width, cancelBox.height);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'black';
+    ctx.strokeRect(cancelBox.x, cancelBox.y, cancelBox.width, cancelBox.height);
+    ctx.fillStyle = 'black';
+    ctx.font = '16px Arial';
+    ctx.fillText('CANCEL', cancelBox.x + 20, cancelBox.y + 20);
+
+    ctx.fillStyle = 'green';
+    ctx.fillRect(saveBox.x, saveBox.y, saveBox.width, saveBox.height);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'black';
+    ctx.strokeRect(saveBox.x, saveBox.y, saveBox.width, saveBox.height);
+    ctx.fillStyle = 'black';
+    ctx.font = '16px Arial';
+    ctx.fillText('SAVE', saveBox.x + 25, saveBox.y + 20);
+}
+
+function drawDropdownButton() {
+    ctx.fillStyle = 'lightgray';
+    ctx.fillRect(100, 50, 150, 30);
+    ctx.strokeStyle = 'black';
+    ctx.strokeRect(100, 100, 150, 30);
+    ctx.fillStyle = 'black';
+    ctx.font = '16px Arial';
+    ctx.fillText('Select an option', 55, 70);
+}
+
+// Draw the drop-down menu options
+function drawDropdownOptions() {
+    ctx.fillStyle = 'white';
+    ctx.fillRect(100, 130, 150, options.length * 30);
+    ctx.strokeStyle = 'black';
+    ctx.strokeRect(100, 130, 150, options.length * 30);
+    for (let i = 0; i < options.length; i++) {
+        ctx.fillStyle = 'black';
+        ctx.fillText(options[i], 105, 150 + i * 30);
+    }
+}
+
+function readDenverFactoryInput(event) {
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    // Check if the click is on the drop-down button
+    if (x >= 100 && x <= 300 && y >= 150 && y <= 180) {
+        dropdownVisible = !dropdownVisible;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawDropdownButton();
+        if (dropdownVisible) {
+            drawDropdownOptions();
+        }
+    } else if (dropdownVisible && x >= 50 && x <= 200 && y >= 80 && y <= 80 + options.length * 30) {
+        // Check if the click is on a drop-down option
+        const selectedIndex = Math.floor((y - 80) / 30);
+        selectedOption = options[selectedIndex];
+        dropdownVisible = false;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawDropdownButton();
+        alert(`You selected: ${selectedOption}`);
+    }
 }
 
 function enterCheyenneRestStop() {
@@ -367,6 +514,92 @@ function drawRestStopMenu() {
     ctx.fillText(text, textX, textY); textY += 25;
     text = '8. Leave the Rest Stop';
     ctx.fillText(text, textX, textY);
+}
+
+function drawBuildCarMenu() {
+    var boxWidth = canvas.width - 100;
+    var boxHeight = canvas.height - 100;
+    var boxX = (canvas.width - boxWidth) / 2;
+    var boxY = (canvas.height - boxHeight) / 2;
+
+    ctx.fillStyle = 'grey';
+    ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+
+    ctx.strokeStyle = 'white';
+    ctx.lineWidth = 25;
+    ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+    ctx.strokeStyle = 'green';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+    var factoryImg = new Image();
+    factoryImg.src = '/src/img/factory-build.png';
+    ctx.drawImage(factoryImg, boxX, boxY, boxWidth, 133);
+
+    ctx.font = '20px Verdana';
+    ctx.fillStyle = 'white';
+    ctx.textAlign = 'left';
+
+    var textX = boxX + 100;
+    var textY = boxY + 150;
+    ctx.fillStyle = 'blue';
+    var text = 'BUILD YOUR CAR';
+    ctx.fillText(text, textX, textY);
+    textY += 25;
+
+    ctx.font = '20px Verdana';
+    ctx.fillStyle = '#00FFFF';
+    text = 'Name Your Car: ';
+    ctx.fillText(text, textX, textY);
+    textY += 30;
+    drawInputBox();
+
+    drawButtons();
+
+    ctx.font = '20px Verdana';
+    ctx.fillStyle = '#00FFFF';
+    text = 'Money (qc): '; // + playerMoney;
+    var alignWithMoneyY = textY;
+    ctx.fillText(text, textX, textY); textY += 25;
+    var cost = 1000;
+    text = 'Cost  (qc): '; // + cost;
+    ctx.fillText(text, textX, textY);  textY += 25;
+    text = 'Body: ';
+    ctx.fillText(text, textX, textY);  textY += 25;
+    text = 'Chassis: ';
+    ctx.fillText(text, textX, textY);  textY += 25;
+    text = 'Suspension: ';
+    ctx.fillText(text, textX, textY);  textY += 25;
+
+    /** Box for Unchangeable Vales **/
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2; textY += 2;
+    ctx.strokeRect(textX - 2, textY, 200, 150); textY += 20;
+
+    text = 'Max Weight: ';
+    ctx.fillText(text, textX, textY);  textY += 25;
+    text = 'Max Space: ';
+    ctx.fillText(text, textX, textY);  textY += 25;
+    text = 'Top Speed: ';
+    ctx.fillText(text, textX, textY);  textY += 25;
+    text = 'Top Speed: ';
+    ctx.fillText(text, textX, textY);  textY += 25;
+
+    text = 'Weight Left: ';
+    ctx.fillText(text, textX, textY);  textY += 25;
+    text = 'Space Left: ';
+    ctx.fillText(text, textX, textY);  textY += 25;
+
+    textX += 300;
+    textY = alignWithMoneyY;
+    text = 'Power Plant: ';
+    ctx.fillText(text, textX, textY);  textY += 25;
+    text = 'Tires: ';
+    ctx.fillText(text, textX, textY);  textY += 50;
+    text = 'Weapons';
+    textX += 75;
+    ctx.fillText(text, textX, textY);  textY += 25;
 }
 
 function sleep(ms) {
@@ -515,6 +748,10 @@ function getColorAt(x, y) {
 function drawLocationMenu() {
     if(inRestStop) {
         drawRestStopMenu();
+    } else if(inFactory) {
+        drawBuildCarMenu();
+        //drawInputBox()
+        //drawDropdownButton();
     }
 }
 
