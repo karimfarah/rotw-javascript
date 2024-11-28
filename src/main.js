@@ -28,7 +28,8 @@ const spriteHeight = 45;
 let spriteX = (canvas.width / 2) + 100;
 let spriteY = canvas.height / 2;
 const speed = 10;
-let playerMoney = 5000;
+
+var player = {money: 10000, speed: 10, x: spriteX, y: spriteY}
 //var offsetPos = spritePositionToImagePosition(1, 0);
 
 /**** CITY CONSTANT IMAGES ****/
@@ -264,6 +265,8 @@ let inputActive = false;
 
 function handleKeyDown(event) {
     if (inputActive) {
+
+
         if (event.key === 'Backspace') {
             carNameText = carNameText.slice(0, -1);
         }
@@ -291,9 +294,16 @@ function handleCanvasClick(event) {
         inputActive = false;
     }
 
+    bodyOptionLocation
+    if (x >= bodyOptionLocation.x && x <= bodyOptionLocation.x + bodyOptionLocation.width && y >= bodyOptionLocation.y && y <= bodyOptionLocation.y + bodyOptionLocation.height) {
+        console.log('Pressed Body Option...');
+        playerCar.body = getNextEnum(bodyArray, playerCar.body);
+    }
+
     // leave the factory
     if (x >= cancelBox.x && x <= cancelBox.x + cancelBox.width && y >= cancelBox.y && y <= cancelBox.y + cancelBox.height) {
         inFactory = false;
+        inputActive = false;
         spriteY -= 40;
         document.removeEventListener('click', handleCanvasClick);
         document.removeEventListener('keydown', handleKeyDown);
@@ -301,7 +311,13 @@ function handleCanvasClick(event) {
     }
 
     if (x >= saveBox.x && x <= saveBox.x + saveBox.width && y >= saveBox.y && y <= saveBox.y + saveBox.height) {
-
+        playerCar = tempCar;
+        inFactory = false;
+        inputActive = false;
+        spriteY -= 40;
+        document.removeEventListener('click', handleCanvasClick);
+        document.removeEventListener('keydown', handleKeyDown);
+        document.addEventListener('keydown', moveSprite);
     }
 
     //drawInputBox();
@@ -316,6 +332,14 @@ function drawInputBox() {
     ctx.fillStyle = 'green';
     ctx.font = '16px Arial';
     ctx.fillText(carNameText, inputBox.x + 25, inputBox.y + 20);
+
+    if(inputActive) {
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'black';
+        ctx.fillStyle = 'black';
+        textWidth = ctx.measureText(carNameText).width;
+        ctx.fillRect(inputBox.x + 30 + textWidth, inputBox.y + 5, 2, 20);
+    }
 }
 
 function drawButtons() {
@@ -516,12 +540,131 @@ function drawRestStopMenu() {
     ctx.fillText(text, textX, textY);
 }
 
+const Subcompact = Object.freeze({
+    NAME: 'Subcompact',
+    COST: 300,
+    WEIGHT: 500,
+    CUBIC_FEET: 200
+});
+
+const Compact = Object.freeze({
+    NAME: 'Compact',
+    COST: 400,
+    WEIGHT: 600,
+    CUBIC_FEET: 220
+});
+
+const MidSize = Object.freeze({
+    NAME: 'Mid-size',
+    COST: 600,
+    WEIGHT: 800,
+    CUBIC_FEET: 240
+});
+
+const Suv = Object.freeze({
+    NAME: 'SUV',
+    COST: 800,
+    WEIGHT: 900,
+    CUBIC_FEET: 300
+});
+
+const Semi = Object.freeze({
+    NAME: 'Semi',
+    COST: 30000,
+    WEIGHT: 10000,
+    CUBIC_FEET: 6000
+});
+
+const Pickup = Object.freeze({
+    NAME: 'Pickup',
+    COST: 900,
+    WEIGHT: 1000,
+    CUBIC_FEET: 600
+});
+
+
+const Light = Object.freeze({
+    NAME: 'Light',
+    COST: 300,
+    WEIGHT: 1200,
+    CUBIC_FEET: 200
+});
+
+const SmallPP = Object.freeze({
+    NAME: 'Small',
+    COST: 300,
+    WEIGHT: 400,
+    CUBIC_FEET: 25,
+    KWATTS: 100,
+    HP: 200
+});
+
+const StandardTires = Object.freeze({
+    NAME: 'Standard',
+    COST: 50,
+    WEIGHT: 30,
+    CUBIC_FEET: 5,
+    HP: 5
+});
+
+const Body = Object.freeze({
+    SUBCOMPACT: Subcompact,
+    COMPACT: Compact,
+    MIDSIZE: MidSize,
+    SUV: Suv,
+    PICKUP: Pickup,
+    SEMI: Semi
+});
+const bodyArray = Object.values(Body);
+
+function getNextEnum(enumArray, currentEnum) {
+    const currentIndex = enumArray.indexOf(currentEnum);
+    const nextIndex = (currentIndex + 1) % enumArray.length;
+    return enumArray[nextIndex];
+}
+
+const Tires = Object.freeze({
+    STANDARD: StandardTires,
+});
+
+const None = Object.freeze({
+    NAME: 'None',
+});
+
+const Weapon = Object.freeze({
+    NONE: None,
+});
+
+var bodyOptionLocation = { x: 0, y: 0, width: 150, height: 25};
+var chassisOptionLocation = { x: 0, y: 0 };
+var powerPlantOptionLocation = { x: 0, y: 0 };
+var tiresOptionLocation = {x: 0, y: 0 };
+var weaponFrontOptionLocation = { x: 0, y: 0 };
+var weaponBackOptionLocation = { x: 0, y: 0 };
+var weaponLeftOptionLocation = { x: 0, y: 0 };
+var weaponRightOptionLocation = { x: 0, y: 0 };
+var weaponTopOptionLocation = { x: 0, y: 0 };
+
+var costLocation = { x: 0, y: 0 };
+var moneyLocation = { x: 0, y: 0 };
+
+
+var playerCar = { cost: 1000, body: Body.SUBCOMPACT, chassis: Light, powerPlant: SmallPP , tires: StandardTires,
+    weaponFront: Weapon.NONE, weaponBack: Weapon.NONE, weaponLeft: Weapon.NONE, weaponRight: Weapon.NONE,
+    weaponTop: Weapon.NONE };
+
+var tempCar;
+
 function drawBuildCarMenu() {
     var boxWidth = canvas.width - 100;
     var boxHeight = canvas.height - 100;
     var boxX = (canvas.width - boxWidth) / 2;
     var boxY = (canvas.height - boxHeight) / 2;
 
+    /** SAVE A TEMP CAR THAT MIGHT BE SAVED LATER **/
+    tempCar = playerCar;
+
+    /** STATIC ITEMS ON MENU **/
     ctx.fillStyle = 'grey';
     ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
 
@@ -562,15 +705,28 @@ function drawBuildCarMenu() {
     text = 'Money (qc): '; // + playerMoney;
     var alignWithMoneyY = textY;
     ctx.fillText(text, textX, textY); textY += 25;
-    var cost = 1000;
-    text = 'Cost  (qc): '; // + cost;
+    text = 'Cost    (qc): '; // + cost;
     ctx.fillText(text, textX, textY);  textY += 25;
     text = 'Body: ';
     ctx.fillText(text, textX, textY);  textY += 25;
-    text = 'Chassis: ';
+    text = 'Chassis/';
     ctx.fillText(text, textX, textY);  textY += 25;
     text = 'Suspension: ';
     ctx.fillText(text, textX, textY);  textY += 25;
+
+    /** ARMOR **/
+    var armorY = textY;
+    var armorX = textX + 210;
+    text = "Armr St Bt";
+    ctx.fillText(text, armorX, armorY);  armorY += 25;
+    text = "F:";
+    ctx.fillText(text, armorX, armorY);  armorY += 25;
+    text = "B:";
+    ctx.fillText(text, armorX, armorY);  armorY += 25;
+    text = "L:";
+    ctx.fillText(text, armorX, armorY);  armorY += 25;
+    text = "R:";
+    ctx.fillText(text, armorX, armorY);  armorY += 25;
 
     /** Box for Unchangeable Vales **/
     ctx.strokeStyle = 'black';
@@ -593,17 +749,88 @@ function drawBuildCarMenu() {
 
     textX += 300;
     textY = alignWithMoneyY;
+    powerPlantOptionLocation.x = textX + 125;
+    powerPlantOptionLocation.y = textY;
     text = 'Power Plant: ';
     ctx.fillText(text, textX, textY);  textY += 25;
+
+    tiresOptionLocation.x = textX + 125;
+    tiresOptionLocation.y = textY;
     text = 'Tires: ';
     ctx.fillText(text, textX, textY);  textY += 50;
+
+
     text = 'Weapons';
     textX += 75;
     ctx.fillText(text, textX, textY);  textY += 25;
-}
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    text = 'Front:';
+    textX -= 25;
+    weaponFrontOptionLocation.x = textX + 75;
+    weaponFrontOptionLocation.y = textY;
+    ctx.fillText(text, textX, textY);  textY += 25;
+    text = 'Back:';
+    weaponBackOptionLocation.x = textX + 75;
+    weaponBackOptionLocation.y = textY;
+    ctx.fillText(text, textX, textY);  textY += 25;
+    text = 'Left:';
+    weaponLeftOptionLocation.x = textX + 75;
+    weaponLeftOptionLocation.y = textY;
+    ctx.fillText(text, textX, textY);  textY += 25;
+    text = 'Right:';
+    weaponRightOptionLocation.x = textX + 75;
+    weaponRightOptionLocation.y = textY;
+    ctx.fillText(text, textX, textY);  textY += 25;
+    text = 'Top:';
+    weaponTopOptionLocation.x = textX + 75;
+    weaponTopOptionLocation.y = textY;
+    ctx.fillText(text, textX, textY);  textY += 25;
+
+    /** PLAYER CHANGEABLE ITEMS **/
+    ctx.fillStyle = '#FFFFFF';
+    text = '' + player.money;
+    textX = (canvas.width - boxWidth) / 2 + 225;
+
+    moneyLocation.x = textX;
+    moneyLocation.y = textY;
+    textY = alignWithMoneyY;
+    ctx.fillText(text, textX, alignWithMoneyY); textY += 25;
+
+    costLocation.x = textX;
+    costLocation.y = textY;
+    text = '' + playerCar.cost;
+    ctx.fillText(text, textX, textY);  textY += 25;
+
+    bodyOptionLocation.x = textX;
+    bodyOptionLocation.y = textY - 25;
+    text = '[' + playerCar.body.NAME + ']';
+    ctx.fillText(text, textX, textY);  textY += 50;
+
+    chassisOptionLocation.x = textX;
+    chassisOptionLocation.y = textY;
+    text = '[' + playerCar.chassis.NAME + ']';
+    ctx.fillText(text, textX, textY);  textY += 25;
+
+    text = '[' + playerCar.powerPlant.NAME + ']';
+    ctx.fillText(text, powerPlantOptionLocation.x, powerPlantOptionLocation.y);
+
+    text = '[' + playerCar.tires.NAME + ']';
+    ctx.fillText(text, tiresOptionLocation.x, tiresOptionLocation.y);
+
+    text = '[' + playerCar.weaponFront.NAME + ']';
+    ctx.fillText(text, weaponFrontOptionLocation.x, weaponFrontOptionLocation.y);
+
+    text = '[' + playerCar.weaponBack.NAME + ']';
+    ctx.fillText(text, weaponBackOptionLocation.x, weaponBackOptionLocation.y);
+
+    text = '[' + playerCar.weaponLeft.NAME + ']';
+    ctx.fillText(text, weaponLeftOptionLocation.x, weaponLeftOptionLocation.y);
+
+    text = '[' + playerCar.weaponRight.NAME + ']';
+    ctx.fillText(text, weaponRightOptionLocation.x, weaponRightOptionLocation.y);
+
+    text = '[' + playerCar.weaponTop.NAME + ']';
+    ctx.fillText(text, weaponTopOptionLocation.x, weaponTopOptionLocation.y);
 }
 
 async function loadCityChanges(cityLocation) {
@@ -735,16 +962,6 @@ function readGrandJunctionRestStopInput(e) {
     }
 }
 
-function getColorAt(x, y) {
-    const imageData = ctx.getImageData(x, y, 1, 1);
-    imageData.willReadFrequently = true;
-
-    const data = imageData.data;
-    return {
-        r: data[0], g: data[1], b: data[2], a: data[3]
-    };
-}
-
 function drawLocationMenu() {
     if(inRestStop) {
         drawRestStopMenu();
@@ -807,6 +1024,21 @@ async function drawTransitionMenu() {
         }
     }
 }
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function getColorAt(x, y) {
+    const imageData = ctx.getImageData(x, y, 1, 1);
+    imageData.willReadFrequently = true;
+
+    const data = imageData.data;
+    return {
+        r: data[0], g: data[1], b: data[2], a: data[3]
+    };
+}
+
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
