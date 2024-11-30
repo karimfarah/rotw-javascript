@@ -15,22 +15,24 @@ var inTransition = false;
 var inFactory = false;
 
 const sprite = new Image();
-sprite.src = '/src/sprite-facing.png';
+sprite.src = '/src/img/sprite-facing.png';
 //sprite.src = '/src/img/male-character-sheet.png';
-
-const BORDER_WIDTH = 2;
-const SPACING_WIDTH = 5;
-const SPRITE_WIDTH = 200;
-const SPRITE_HEIGHT = 200;
 
 const spriteWidth = 35;
 const spriteHeight = 45;
+const enemyWidth = 32;
+const enemyHeight = 32;
+
 let spriteX = (canvas.width / 2) + 100;
 let spriteY = canvas.height / 2;
 const speed = 10;
 
-var player = {money: 10000, speed: 10, x: spriteX, y: spriteY}
+var player = { money: 10000, speed: 10, x: spriteX, y: spriteY, hasCar: false, car: null };
 //var offsetPos = spritePositionToImagePosition(1, 0);
+
+
+
+let enemyArray = [];
 
 /**** CITY CONSTANT IMAGES ****/
 const City = Object.freeze({
@@ -94,23 +96,28 @@ function moveSprite(e) {
     let tempY = spriteY;
     let tempCameraX = cameraX;
     let tempCameraY = cameraY;
+    var tempSpriteSrc = '';
 
     switch (e.code) {
         case 'ArrowUp':
             tempY -= speed;
             tempCameraY -= speed;
+            tempSpriteSrc = '/src/img/car-sprite-forward.png';
             break;
         case 'ArrowDown':
             tempY += speed;
             tempCameraY += speed;
+            tempSpriteSrc = '/src/img/car-sprite-down.png';
             break;
         case 'ArrowLeft':
             tempX -= speed;
             tempCameraX -= speed;
+            tempSpriteSrc = '/src/img/car-sprite-left.png';
             break;
         case 'ArrowRight':
             tempX += speed;
             tempCameraX += speed;
+            tempSpriteSrc = '/src/img/car-sprite-right.png';
             break;
     }
 
@@ -125,6 +132,13 @@ function moveSprite(e) {
             spriteX = tempX;
             spriteY = tempY;
         }
+
+        if(player.hasCar === true) {
+            sprite.src = tempSpriteSrc;
+        } else {
+
+        }
+
         checkPlayerLocation();
     }
 
@@ -161,6 +175,34 @@ function enterI25North(camX, camY) {
 
     currentCity = City.NONE;
     currentRoad = Road.I25_NORTH;
+
+    /** Create enemy vehicles **/
+    //var enemy;
+    var enemy = { speed: 10, x: 0, y: 0, car: null, carSprite: null};
+    enemy.carSprite = new Image();
+    enemy.carSprite.src = '/src/img/maroon-racer-down.png';
+    enemy.speed = 20;
+    enemy.x = 2040;
+    enemy.y = 4210;
+    enemyArray.push(enemy);
+
+    var enemy2 = { speed: 10, x: 0, y: 0, car: null, carSprite: null };
+    enemy2.carSprite = new Image();
+    enemy2.carSprite.src = '/src/img/maroon-racer-down.png';
+    enemy2.speed = 20;
+    enemy2.x = 1240;
+    enemy2.y = 4510;
+
+    enemyArray.push(enemy2);
+
+    var enemy3 = { speed: 10, x: 0, y: 0, car: null, carSprite: null };
+    enemy3.carSprite = new Image();
+    enemy3.carSprite.src = '/src/img/maroon-racer-down.png';
+    enemy3.speed = 20;
+    enemy3.x = 1740;
+    enemy3.y = 3410;
+
+    enemyArray.push(enemy3);
 }
 
 function checkCheyenneLocations() {
@@ -287,6 +329,7 @@ function handleCanvasClick(event) {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
+    console.log('click at: ' + x + ", " + y);
     // Check if the click is inside the input box
     if (x >= inputBox.x && x <= inputBox.x + inputBox.width && y >= inputBox.y && y <= inputBox.y + inputBox.height) {
         inputActive = true;
@@ -294,11 +337,53 @@ function handleCanvasClick(event) {
         inputActive = false;
     }
 
-    bodyOptionLocation
-    if (x >= bodyOptionLocation.x && x <= bodyOptionLocation.x + bodyOptionLocation.width && y >= bodyOptionLocation.y && y <= bodyOptionLocation.y + bodyOptionLocation.height) {
+
+    if (x >= bodyOptionLocation.x && x <= bodyOptionLocation.x + bodyOptionLocation.width && y >= bodyOptionLocation.y - 25 && y <= bodyOptionLocation.y - 25 + bodyOptionLocation.height) {
         console.log('Pressed Body Option...');
-        playerCar.body = getNextEnum(bodyArray, playerCar.body);
+        tempCar.body = getNextEnum(bodyArray, tempCar.body);
     }
+
+    if (x >= chassisOptionLocation.x && x <= chassisOptionLocation.x + chassisOptionLocation.width && y >= chassisOptionLocation.y - 25 && y <= chassisOptionLocation.y - 25 + chassisOptionLocation.height) {
+        console.log('Pressed Chassis Option...');
+        tempCar.chassis = getNextEnum(chassisArray, tempCar.chassis);
+    }
+
+    if (x >= fusionEngineOptionLocation.x && x <= fusionEngineOptionLocation.x + fusionEngineOptionLocation.width && y >= fusionEngineOptionLocation.y - 25 && y <= fusionEngineOptionLocation.y - 25 + fusionEngineOptionLocation.height) {
+        console.log('Pressed Fusion Engine Option...');
+        tempCar.fusionEngine = getNextEnum(fusionEngineArray, tempCar.fusionEngine);
+    }
+
+    if (x >= tiresOptionLocation.x && x <= tiresOptionLocation.x + tiresOptionLocation.width && y >= tiresOptionLocation.y - 25 && y <= tiresOptionLocation.y - 25 + tiresOptionLocation.height) {
+        console.log('Pressed Tire Option...');
+        tempCar.tires = getNextEnum(tiresArray, tempCar.tires);
+    }
+
+    if (x >= weaponFrontOptionLocation.x && x <= weaponFrontOptionLocation.x + weaponFrontOptionLocation.width && y >= weaponFrontOptionLocation.y - 25 && y <= weaponFrontOptionLocation.y - 25 + weaponFrontOptionLocation.height) {
+        console.log('Pressed Tire Option...');
+        tempCar.weaponFront = getNextEnum(weaponArray, tempCar.weaponFront);
+    }
+
+    if (x >= weaponBackOptionLocation.x && x <= weaponBackOptionLocation.x + weaponBackOptionLocation.width && y >= weaponBackOptionLocation.y - 25 && y <= weaponBackOptionLocation.y - 25 + weaponBackOptionLocation.height) {
+        console.log('Pressed Tire Option...');
+        tempCar.weaponBack = getNextEnum(weaponArray, tempCar.weaponBack);
+    }
+
+    if (inBox(x, y, weaponLeftOptionLocation)) {
+        console.log('Pressed Tire Option...');
+        tempCar.weaponLeft = getNextEnum(weaponArray, tempCar.weaponLeft);
+    }
+
+    if (inBox(x, y, weaponRightOptionLocation)) {
+        console.log('Pressed Tire Option...');
+        tempCar.weaponRight = getNextEnum(weaponArray, tempCar.weaponRight);
+    }
+
+    if (inBox(x, y, weaponTopOptionLocation)) {
+        console.log('Pressed Tire Option...');
+        tempCar.weaponTop = getNextEnum(weaponArray, tempCar.weaponTop);
+    }
+
+    calcAndSetCarCost(tempCar);
 
     // leave the factory
     if (x >= cancelBox.x && x <= cancelBox.x + cancelBox.width && y >= cancelBox.y && y <= cancelBox.y + cancelBox.height) {
@@ -312,6 +397,9 @@ function handleCanvasClick(event) {
 
     if (x >= saveBox.x && x <= saveBox.x + saveBox.width && y >= saveBox.y && y <= saveBox.y + saveBox.height) {
         playerCar = tempCar;
+        player.hasCar = true;
+        player.car = playerCar;
+        sprite.src = '/src/img/car-sprite-forward.png';
         inFactory = false;
         inputActive = false;
         spriteY -= 40;
@@ -321,6 +409,21 @@ function handleCanvasClick(event) {
     }
 
     //drawInputBox();
+}
+
+function calcAndSetCarCost(carSpecs) {
+    var total = carSpecs.body.COST + carSpecs.chassis.COST + carSpecs.fusionEngine.COST + carSpecs.tires.COST +
+        carSpecs.weaponFront.COST + carSpecs.weaponBack.COST + carSpecs.weaponLeft.COST + carSpecs.weaponRight.COST +
+        carSpecs.weaponTop.COST;
+
+    carSpecs.cost = total;
+}
+
+function inBox(x, y, boxRect) {
+    if (x >= boxRect.x && x <= boxRect.x + boxRect.width && y >= boxRect.y - 25 && y <= boxRect.y - 25 + boxRect.height) {
+        return true;
+    }
+    return false;
 }
 
 function drawInputBox() {
@@ -583,14 +686,60 @@ const Pickup = Object.freeze({
 });
 
 
-const Light = Object.freeze({
+const LightChassis = Object.freeze({
     NAME: 'Light',
     COST: 300,
     WEIGHT: 1200,
     CUBIC_FEET: 200
 });
 
-const SmallPP = Object.freeze({
+const StandardChassis = Object.freeze({
+    NAME: 'Standard',
+    COST: 400,
+    WEIGHT: 1500,
+    CUBIC_FEET: 300
+});
+
+const LargeChassis = Object.freeze({
+    NAME: 'Large',
+    COST: 600,
+    WEIGHT: 2300,
+    CUBIC_FEET: 400
+});
+
+const HeavyChassis = Object.freeze({
+    NAME: 'Heavy',
+    COST: 800,
+    WEIGHT: 2500,
+    CUBIC_FEET: 600
+});
+
+const ExtraHeavyChassis = Object.freeze({
+    NAME: 'ExtraHeavy',
+    COST: 900,
+    WEIGHT: 3200,
+    CUBIC_FEET: 800
+});
+
+const MegaLoadChassis = Object.freeze({
+    NAME: 'Light',
+    COST: 300,
+    WEIGHT: 1200,
+    CUBIC_FEET: 200
+});
+
+const Chassis = Object.freeze({
+    LIGHT: LightChassis,
+    STANDARD: StandardChassis,
+    LARGE: LargeChassis,
+    HEAVY: HeavyChassis,
+    EXTRA_HEAVY: ExtraHeavyChassis,
+    MEGALOAD: MegaLoadChassis
+});
+const chassisArray = Object.values(Chassis);
+
+
+const SmallEngine = Object.freeze({
     NAME: 'Small',
     COST: 300,
     WEIGHT: 400,
@@ -599,13 +748,50 @@ const SmallPP = Object.freeze({
     HP: 200
 });
 
-const StandardTires = Object.freeze({
-    NAME: 'Standard',
-    COST: 50,
-    WEIGHT: 30,
-    CUBIC_FEET: 5,
-    HP: 5
+const MediumEngine = Object.freeze({
+    NAME: 'Medium',
+    COST: 400,
+    WEIGHT: 500,
+    CUBIC_FEET: 50,
+    KWATTS: 125,
+    HP: 300
 });
+
+const LargeEngine = Object.freeze({
+    NAME: 'Large',
+    COST: 600,
+    WEIGHT: 600,
+    CUBIC_FEET: 75,
+    KWATTS: 150,
+    HP: 400
+});
+
+const ExtraLargeEngine = Object.freeze({
+    NAME: 'ExtraLarge',
+    COST: 800,
+    WEIGHT: 700,
+    CUBIC_FEET: 100,
+    KWATTS: 200,
+    HP: 600
+});
+
+const MegaCoreEngine = Object.freeze({
+    NAME: 'MegaCore',
+    COST: 900,
+    WEIGHT: 1000,
+    CUBIC_FEET: 200,
+    KWATTS: 500,
+    HP: 1200
+});
+
+const FusionEngine = Object.freeze({
+    SMALL: SmallEngine,
+    MEDIUM: MediumEngine,
+    LARGE: LargeEngine,
+    EXTRA_LARGE: ExtraLargeEngine,
+    MEGA_CORE: MegaCoreEngine,
+});
+const fusionEngineArray = Object.values(FusionEngine);
 
 const Body = Object.freeze({
     SUBCOMPACT: Subcompact,
@@ -623,33 +809,115 @@ function getNextEnum(enumArray, currentEnum) {
     return enumArray[nextIndex];
 }
 
+const StandardTires = Object.freeze({
+    NAME: 'Standard',
+    COST: 50,
+    WEIGHT: 30,
+    CUBIC_FEET: 5,
+    HP: 5
+});
+
+const OffRoad = Object.freeze({
+    NAME: 'Off-Road',
+    COST: 100,
+    WEIGHT: 40,
+    CUBIC_FEET: 10,
+    HP: 10
+});
+
+const RunFlat = Object.freeze({
+    NAME: 'Run-Flat',
+    COST: 200,
+    WEIGHT: 50,
+    CUBIC_FEET: 5,
+    HP: 15
+});
+
+const Solid = Object.freeze({
+    NAME: 'Solid',
+    COST: 500,
+    WEIGHT: 75,
+    CUBIC_FEET: 5,
+    HP: 20
+});
+
 const Tires = Object.freeze({
     STANDARD: StandardTires,
+    OFF_ROAD: OffRoad,
+    RUN_FLAT: RunFlat,
+    SOLID: Solid
+});
+const tiresArray = Object.values(Tires);
+
+const MachineGun = Object.freeze({
+    NAME: 'Machine Gun',
+    COST: 1000,
+    WEIGHT: 3,
+    UNIT: 20,
+    CUBIC_FEET: 5,
+    DAMAGE: 20,
+    AREA_DAMAGE: false
+});
+
+const GrenadeLauncher = Object.freeze({
+    NAME: 'Gr. Launchr',
+    COST: 1000,
+    WEIGHT: 5,
+    UNIT: 1,
+    CUBIC_FEET: 10,
+    DAMAGE: 16,
+    AREA_DAMAGE: true
+});
+
+const RocketLauncher = Object.freeze({
+    NAME: 'Rckt Launchr',
+    COST: 1000,
+    WEIGHT: 25,
+    UNIT: 1,
+    CUBIC_FEET: 10,
+    DAMAGE: 24,
+    AREA_DAMAGE: false
+});
+
+const FlameThrower = Object.freeze({
+    NAME: 'Flame Thrwr',
+    COST: 500,
+    WEIGHT: 5,
+    UNIT: 1,
+    CUBIC_FEET: 10,
+    DAMAGE: 20,
+    AREA_DAMAGE: false
 });
 
 const None = Object.freeze({
     NAME: 'None',
+    COST: 0
 });
 
 const Weapon = Object.freeze({
+    MACHINE_GUN: MachineGun,
+    GRENADE_LAUNCHER: GrenadeLauncher,
+    ROCKET_LAUNCHER: RocketLauncher,
+    FLAME_THROWER: FlameThrower,
     NONE: None,
 });
+const weaponArray = Object.values(Weapon);
 
 var bodyOptionLocation = { x: 0, y: 0, width: 150, height: 25};
-var chassisOptionLocation = { x: 0, y: 0 };
-var powerPlantOptionLocation = { x: 0, y: 0 };
-var tiresOptionLocation = {x: 0, y: 0 };
-var weaponFrontOptionLocation = { x: 0, y: 0 };
-var weaponBackOptionLocation = { x: 0, y: 0 };
-var weaponLeftOptionLocation = { x: 0, y: 0 };
-var weaponRightOptionLocation = { x: 0, y: 0 };
-var weaponTopOptionLocation = { x: 0, y: 0 };
+var chassisOptionLocation = { x: 0, y: 0, width: 150, height: 25 };
+var fusionEngineOptionLocation = { x: 0, y: 0, width: 150, height: 25 };
+var tiresOptionLocation = {x: 0, y: 0, width: 150, height: 25 };
+var weaponFrontOptionLocation = { x: 0, y: 0, width: 150, height: 25 };
+var weaponBackOptionLocation = { x: 0, y: 0, width: 150, height: 25 };
+var weaponLeftOptionLocation = { x: 0, y: 0, width: 150, height: 25  };
+var weaponRightOptionLocation = { x: 0, y: 0, width: 150, height: 25  };
+var weaponTopOptionLocation = { x: 0, y: 0, width: 150, height: 25  };
 
 var costLocation = { x: 0, y: 0 };
 var moneyLocation = { x: 0, y: 0 };
 
 
-var playerCar = { cost: 1000, body: Body.SUBCOMPACT, chassis: Light, powerPlant: SmallPP , tires: StandardTires,
+var playerCar = { cost: 1000, body: Body.SUBCOMPACT, chassis: LightChassis, fusionEngine: SmallEngine , tires: StandardTires,
     weaponFront: Weapon.NONE, weaponBack: Weapon.NONE, weaponLeft: Weapon.NONE, weaponRight: Weapon.NONE,
     weaponTop: Weapon.NONE };
 
@@ -749,8 +1017,8 @@ function drawBuildCarMenu() {
 
     textX += 300;
     textY = alignWithMoneyY;
-    powerPlantOptionLocation.x = textX + 125;
-    powerPlantOptionLocation.y = textY;
+    fusionEngineOptionLocation.x = textX + 125;
+    fusionEngineOptionLocation.y = textY;
     text = 'Power Plant: ';
     ctx.fillText(text, textX, textY);  textY += 25;
 
@@ -788,48 +1056,52 @@ function drawBuildCarMenu() {
 
     /** PLAYER CHANGEABLE ITEMS **/
     ctx.fillStyle = '#FFFFFF';
-    text = '' + player.money;
+    if(player.money - tempCar.cost < 0) {
+        ctx.fillStyle = '#FF0000';
+    }
+    text = '' + player.money - tempCar.cost;
     textX = (canvas.width - boxWidth) / 2 + 225;
 
     moneyLocation.x = textX;
     moneyLocation.y = textY;
     textY = alignWithMoneyY;
     ctx.fillText(text, textX, alignWithMoneyY); textY += 25;
+    ctx.fillStyle = '#FFFFFF';
 
     costLocation.x = textX;
     costLocation.y = textY;
-    text = '' + playerCar.cost;
+    text = '' + tempCar.cost;
     ctx.fillText(text, textX, textY);  textY += 25;
 
     bodyOptionLocation.x = textX;
-    bodyOptionLocation.y = textY - 25;
-    text = '[' + playerCar.body.NAME + ']';
+    bodyOptionLocation.y = textY;
+    text = '[' + tempCar.body.NAME + ']';
     ctx.fillText(text, textX, textY);  textY += 50;
 
     chassisOptionLocation.x = textX;
     chassisOptionLocation.y = textY;
-    text = '[' + playerCar.chassis.NAME + ']';
+    text = '[' + tempCar.chassis.NAME + ']';
     ctx.fillText(text, textX, textY);  textY += 25;
 
-    text = '[' + playerCar.powerPlant.NAME + ']';
-    ctx.fillText(text, powerPlantOptionLocation.x, powerPlantOptionLocation.y);
+    text = '[' + tempCar.fusionEngine.NAME + ']';
+    ctx.fillText(text, fusionEngineOptionLocation.x, fusionEngineOptionLocation.y);
 
-    text = '[' + playerCar.tires.NAME + ']';
+    text = '[' + tempCar.tires.NAME + ']';
     ctx.fillText(text, tiresOptionLocation.x, tiresOptionLocation.y);
 
-    text = '[' + playerCar.weaponFront.NAME + ']';
+    text = '[' + tempCar.weaponFront.NAME + ']';
     ctx.fillText(text, weaponFrontOptionLocation.x, weaponFrontOptionLocation.y);
 
-    text = '[' + playerCar.weaponBack.NAME + ']';
+    text = '[' + tempCar.weaponBack.NAME + ']';
     ctx.fillText(text, weaponBackOptionLocation.x, weaponBackOptionLocation.y);
 
-    text = '[' + playerCar.weaponLeft.NAME + ']';
+    text = '[' + tempCar.weaponLeft.NAME + ']';
     ctx.fillText(text, weaponLeftOptionLocation.x, weaponLeftOptionLocation.y);
 
-    text = '[' + playerCar.weaponRight.NAME + ']';
+    text = '[' + tempCar.weaponRight.NAME + ']';
     ctx.fillText(text, weaponRightOptionLocation.x, weaponRightOptionLocation.y);
 
-    text = '[' + playerCar.weaponTop.NAME + ']';
+    text = '[' + tempCar.weaponTop.NAME + ']';
     ctx.fillText(text, weaponTopOptionLocation.x, weaponTopOptionLocation.y);
 }
 
@@ -1039,14 +1311,33 @@ function getColorAt(x, y) {
     };
 }
 
+function isObjectInView(locX, locY, camX, camY, width, height) {
+    //console.log("check if ("+camX+">="+locX+") and ("+camX+","+camY+") and ("+camX + width+","+camY + height+")");
+    if(locX <= camX && locX <= camX + width &&
+        locY <= camY && locY <= camY + height ) {
+        return true;
+    }
+    return false;
+}
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Large map tile scrolling vs single screen city map
     if(currentCity === City.NONE) {
+        //console.log('cameraX: ' + cameraX + ',' + cameraY);
         ctx.drawImage(roadBackground, cameraX, cameraY, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
         ctx.drawImage(sprite, (canvas.width/2), (canvas.height/2), spriteWidth, spriteHeight);
+
+        //ctx.drawImage(enemySprite, enemySprite.x, enemySprite.y, enemyWidth, enemyHeight);
+        for(let enemy of enemyArray) {
+            if (isObjectInView(enemy.x, enemy.y, cameraX, cameraY, canvas.width, canvas.height)) {
+                console.log('camX: ' + cameraX + " camY: " + cameraY);
+                console.log('enemyX: ' + enemy.x + " camY: " + enemy.y);
+                ctx.drawImage(enemy.carSprite, (enemy.x - cameraX + (canvas.width/2)), (enemy.y - cameraY + (canvas.height/2)), enemyWidth, enemyHeight);
+            }
+        }
+
     } else {
         ctx.drawImage(townBackground, 0, 0, canvas.width, canvas.height);
         ctx.drawImage(sprite, spriteX, spriteY, spriteWidth, spriteHeight);
