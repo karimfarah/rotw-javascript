@@ -416,7 +416,26 @@ function calcAndSetCarCost(carSpecs) {
         carSpecs.weaponFront.COST + carSpecs.weaponBack.COST + carSpecs.weaponLeft.COST + carSpecs.weaponRight.COST +
         carSpecs.weaponTop.COST;
 
+    var weight = carSpecs.body.WEIGHT + carSpecs.fusionEngine.WEIGHT +
+        carSpecs.weaponFront.WEIGHT + carSpecs.weaponBack.WEIGHT + carSpecs.weaponLeft.WEIGHT + carSpecs.weaponRight.WEIGHT +
+        carSpecs.weaponTop.WEIGHT;
+
+    var maxWeight = carSpecs.chassis.WEIGHT;
+
+    var maxSpace = carSpecs.body.CUBIC_FEET;
+    var space = carSpecs.fusionEngine.CUBIC_FEET +
+        carSpecs.weaponFront.CUBIC_FEET + carSpecs.weaponBack.CUBIC_FEET + carSpecs.weaponLeft.CUBIC_FEET + carSpecs.weaponRight.CUBIC_FEET +
+        carSpecs.weaponTop.CUBIC_FEET;
+
+    var topSpeed = (180 * carSpecs.fusionEngine.KWATTS * 20) /
+        ((carSpecs.fusionEngine.KWATTS * 20) + weight);
+
     carSpecs.cost = total;
+    carSpecs.currentWeight = weight;
+    carSpecs.maxWeight = maxWeight;
+    carSpecs.maxSpace = maxSpace;
+    carSpecs.currentSpace = space;
+    carSpecs.topSpeed = Math.round(topSpeed);
 }
 
 function inBox(x, y, boxRect) {
@@ -690,42 +709,42 @@ const LightChassis = Object.freeze({
     NAME: 'Light',
     COST: 300,
     WEIGHT: 1200,
-    CUBIC_FEET: 200
+    HP: 200
 });
 
 const StandardChassis = Object.freeze({
     NAME: 'Standard',
     COST: 400,
     WEIGHT: 1500,
-    CUBIC_FEET: 300
+    HP: 300
 });
 
 const LargeChassis = Object.freeze({
     NAME: 'Large',
     COST: 600,
     WEIGHT: 2300,
-    CUBIC_FEET: 400
+    HP: 400
 });
 
 const HeavyChassis = Object.freeze({
     NAME: 'Heavy',
     COST: 800,
     WEIGHT: 2500,
-    CUBIC_FEET: 600
+    HP: 600
 });
 
 const ExtraHeavyChassis = Object.freeze({
-    NAME: 'ExtraHeavy',
+    NAME: 'Extra Heavy',
     COST: 900,
     WEIGHT: 3200,
-    CUBIC_FEET: 800
+    HP: 800
 });
 
 const MegaLoadChassis = Object.freeze({
-    NAME: 'Light',
-    COST: 300,
-    WEIGHT: 1200,
-    CUBIC_FEET: 200
+    NAME: 'Mega Load',
+    COST: 10000,
+    WEIGHT: 50000,
+    HP: 1200
 });
 
 const Chassis = Object.freeze({
@@ -891,7 +910,9 @@ const FlameThrower = Object.freeze({
 
 const None = Object.freeze({
     NAME: 'None',
-    COST: 0
+    COST: 0,
+    WEIGHT: 0,
+    CUBIC_FEET: 0
 });
 
 const Weapon = Object.freeze({
@@ -917,7 +938,8 @@ var costLocation = { x: 0, y: 0 };
 var moneyLocation = { x: 0, y: 0 };
 
 
-var playerCar = { cost: 1000, body: Body.SUBCOMPACT, chassis: LightChassis, fusionEngine: SmallEngine , tires: StandardTires,
+var playerCar = { cost: 1000, maxWeight: 5000, currentWeight: 0, maxSpace: 100, currentSpace: 10, topSpeed: 50,
+    body: Body.SUBCOMPACT, chassis: LightChassis, fusionEngine: SmallEngine , tires: StandardTires,
     weaponFront: Weapon.NONE, weaponBack: Weapon.NONE, weaponLeft: Weapon.NONE, weaponRight: Weapon.NONE,
     weaponTop: Weapon.NONE };
 
@@ -1002,19 +1024,22 @@ function drawBuildCarMenu() {
     ctx.strokeRect(textX - 2, textY, 200, 150); textY += 20;
 
     text = 'Max Weight: ';
+    var maxWeightY = textY;
     ctx.fillText(text, textX, textY);  textY += 25;
     text = 'Max Space: ';
     ctx.fillText(text, textX, textY);  textY += 25;
     text = 'Top Speed: ';
     ctx.fillText(text, textX, textY);  textY += 25;
-    text = 'Top Speed: ';
-    ctx.fillText(text, textX, textY);  textY += 25;
+    //text = 'Top Speed: ';
+    //ctx.fillText(text, textX, textY);  textY += 25;
+    textY += 25;
 
     text = 'Weight Left: ';
     ctx.fillText(text, textX, textY);  textY += 25;
     text = 'Space Left: ';
     ctx.fillText(text, textX, textY);  textY += 25;
 
+    ctx.fillStyle = '#00FFFF';
     textX += 300;
     textY = alignWithMoneyY;
     fusionEngineOptionLocation.x = textX + 125;
@@ -1103,6 +1128,36 @@ function drawBuildCarMenu() {
 
     text = '[' + tempCar.weaponTop.NAME + ']';
     ctx.fillText(text, weaponTopOptionLocation.x, weaponTopOptionLocation.y);
+
+    /** DERIVED VALUES FROM USER INPUT **/
+    ctx.fillStyle = '#FFFFFF';
+    textX = 280;
+    textY = maxWeightY;
+    text = '' + tempCar.maxWeight;
+    ctx.fillText(text, textX, textY); textY += 25;
+    text = '' + tempCar.maxSpace;
+    ctx.fillText(text, textX, textY); textY += 25;
+
+    text = '' + tempCar.topSpeed;
+    ctx.fillText(text, textX, textY); textY += 25;
+    textY += 25;
+
+    if((tempCar.maxWeight - tempCar.currentWeight) < 0) {
+        ctx.fillStyle = '#FF0000';
+    } else {
+        ctx.fillStyle = '#FFFFFF';
+    }
+    text = '' + (tempCar.maxWeight - tempCar.currentWeight);
+    ctx.fillText(text, textX, textY); textY += 25;
+
+    if((tempCar.maxSpace - tempCar.currentSpace) < 0) {
+        ctx.fillStyle = '#FF0000';
+    } else {
+        ctx.fillStyle = '#FFFFFF';
+    }
+    text = '' + (tempCar.maxSpace - tempCar.currentSpace);
+    ctx.fillText(text, textX, textY); textY += 25;
+
 }
 
 async function loadCityChanges(cityLocation) {
