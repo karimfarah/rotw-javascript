@@ -30,7 +30,7 @@ const speed = 10;
 var player = { money: 10000, speed: 10, x: spriteX, y: spriteY, hasCar: false, car: null };
 //var offsetPos = spritePositionToImagePosition(1, 0);
 
-
+let carSaveError = false;
 
 let enemyArray = [];
 
@@ -324,6 +324,12 @@ function handleKeyDown(event) {
     }
 }
 
+async function popUpSaveError() {
+    carSaveError = true;
+    await sleep(3000);
+    carSaveError = false;
+}
+
 function handleCanvasClick(event) {
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
@@ -396,6 +402,12 @@ function handleCanvasClick(event) {
     }
 
     if (x >= saveBox.x && x <= saveBox.x + saveBox.width && y >= saveBox.y && y <= saveBox.y + saveBox.height) {
+        if((tempCar.maxWeight - tempCar.currentWeight) < 0 || (tempCar.maxSpace - tempCar.currentSpace) < 0 ||
+            (player.money - tempCar.cost) < 0) {
+            popUpSaveError();
+            return;
+        }
+
         playerCar = tempCar;
         player.hasCar = true;
         player.car = playerCar;
@@ -953,6 +965,7 @@ function drawBuildCarMenu() {
 
     /** SAVE A TEMP CAR THAT MIGHT BE SAVED LATER **/
     tempCar = playerCar;
+    calcAndSetCarCost(tempCar);
 
     /** STATIC ITEMS ON MENU **/
     ctx.fillStyle = 'grey';
@@ -1299,6 +1312,12 @@ function drawLocationMenu() {
     }
 }
 
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 async function drawTransitionMenu() {
     if (inTransition) {
         var popUpWidth = canvas.width - 300;
@@ -1344,6 +1363,54 @@ async function drawTransitionMenu() {
                 textY += 25;
 
                 text = '(Your ride was rocky)';
+                ctx.fillText(text, textX, textY);
+                textY += 25;
+
+                break;
+            case City.LAS_VEGAS:
+                travelImg.src = '/src/img/travel-lasvegas-day.png';
+
+/*
+                if(getRandomInt(1,2) === 1) {
+                    travelImg.src += '-day.png';
+                } else {
+                    travelImg.src += '-night.png';
+                }
+*/
+
+                ctx.drawImage(travelImg, popUpX, popUpY, popUpWidth, popUpHeight);
+                ctx.font = '20px Verdana';
+                ctx.fillStyle = 'white';
+                ctx.textAlign = 'left';
+
+                var textX = popUpX + 100;
+                var textY = popUpY + 250;
+
+                var text = '...Traveling to Las Vegas..';
+                ctx.fillText(text, textX, textY);
+                textY += 25;
+
+                text = '(Your ride was exhilarating!)';
+                ctx.fillText(text, textX, textY);
+                textY += 25;
+
+                break;
+            case City.GRAND_JUNCTION:
+                travelImg.src = '/src/img/travel-grandjunction.png';
+
+                ctx.drawImage(travelImg, popUpX, popUpY, popUpWidth, popUpHeight);
+                ctx.font = '20px Verdana';
+                ctx.fillStyle = 'white';
+                ctx.textAlign = 'left';
+
+                var textX = popUpX + 100;
+                var textY = popUpY + 250;
+
+                var text = '...Traveling to Grand Junction...';
+                ctx.fillText(text, textX, textY);
+                textY += 25;
+
+                text = '(Your ride was bumpy)';
                 ctx.fillText(text, textX, textY);
                 textY += 25;
 
@@ -1441,6 +1508,43 @@ function enemyAction(playerX, playerY, enemy) {
     }
 }
 
+async function drawNotificationWindow() {
+    var popUpWidth = canvas.width - 300;
+    var popUpHeight = canvas.height - 300;
+    var popUpX = (canvas.width - popUpWidth) / 2;
+    var popUpY = ((canvas.height - popUpHeight) / 2) - 25;
+    if(carSaveError) {
+        ctx.fillStyle = 'white';
+        ctx.fillRect(popUpX, popUpY, popUpWidth, popUpHeight);
+
+        ctx.strokeStyle = 'grey';
+        ctx.lineWidth = 25;
+        ctx.strokeRect(popUpX, popUpY, popUpWidth, popUpHeight);
+
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(popUpX, popUpY, popUpWidth, popUpHeight);
+
+        ctx.font = '20px Verdana';
+        ctx.fillStyle = 'white';
+        ctx.textAlign = 'left';
+
+        var textX = popUpX + 50;
+        var textY = popUpY + 50;
+        ctx.fillStyle = '#FF0000';
+        var text = 'SAVE ERROR';
+        ctx.fillText(text, textX, textY);
+        textY += 50;
+
+        ctx.fillStyle = 'black';
+        var text = 'Invalid car specs.';
+        ctx.fillText(text, textX, textY); textY += 25;
+
+        text = 'Fix all negative/red values before saving';
+        ctx.fillText(text, textX, textY); textY += 25;
+    }
+}
+
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -1465,6 +1569,7 @@ function draw() {
 
         drawLocationMenu();
         drawTransitionMenu();
+        drawNotificationWindow();
     }
 
     requestAnimationFrame(draw);
