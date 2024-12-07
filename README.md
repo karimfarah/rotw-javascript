@@ -2,3 +2,6 @@
 
 A retro-80s Autoduel-like (based on Car Wars) browser game written entirely in javascript. This ia work in progress as of November 2024
 
+To run:
+1. Download entire project
+2. Open the play.html in a browser (or in your IDE tool)
