@@ -1,3 +1,5 @@
+let spinWheel = false;
+
 function drawLocationMenu() {
     if(inRestStop) {
         drawRestStopMenu();
@@ -116,6 +118,7 @@ async function drawNotificationWindow() {
     var popUpHeight = canvas.height - 300;
     var popUpX = (canvas.width - popUpWidth) / 2;
     var popUpY = ((canvas.height - popUpHeight) / 2) - 25;
+
     if(carSaveError) {
         ctx.fillStyle = 'white';
         ctx.fillRect(popUpX, popUpY, popUpWidth, popUpHeight);
@@ -145,6 +148,8 @@ async function drawNotificationWindow() {
 
         text = 'Fix all negative/red values before saving';
         ctx.fillText(text, textX, textY); textY += 25;
+    } else if(spinWheel) {
+        drawSpinWheelNotification();
     }
 }
 

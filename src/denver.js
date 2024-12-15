@@ -25,7 +25,7 @@ function enterDenverRestStop() {
     console.log("Entering Rest Stop");
     document.removeEventListener('keydown', moveSprite)
     document.addEventListener('keydown', readDenverRestStopInput);
-    canvas.addEventListener('click', handleCanvasClick);
+    //canvas.addEventListener('click', handleCanvasClick);
     inRestStop = true;
 }
 
@@ -46,6 +46,7 @@ function readDenverRestStopInput(e) {
             break;
         case '4':
             inRestStop = false;
+            document.removeEventListener('keydown', readDenverRestStopInput);
             loadCityChanges(City.GRAND_JUNCTION);
             break;
         case '8':

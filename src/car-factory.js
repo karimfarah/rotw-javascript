@@ -1,7 +1,7 @@
 const options = ['Option 1', 'Option 2', 'Option 3'];
 let dropdownVisible = false;
 let selectedOption = null;
-const inputBox = { x: 325, y: 205, width: 200, height: 30 };
+const carNameInputBox = { x: 325, y: 205, width: 200, height: 30 };
 const cancelBox = { x: 450, y: 500, width: 100, height: 30 };
 const saveBox = { x: 600, y: 500, width: 100, height: 30 };
 let carNameText = '';
@@ -60,7 +60,7 @@ function handleCanvasClick(event) {
 
     console.log('click at: ' + x + ", " + y);
     // Check if the click is inside the input box
-    if (x >= inputBox.x && x <= inputBox.x + inputBox.width && y >= inputBox.y && y <= inputBox.y + inputBox.height) {
+    if (x >= carNameInputBox.x && x <= carNameInputBox.x + carNameInputBox.width && y >= carNameInputBox.y && y <= carNameInputBox.y + carNameInputBox.height) {
         inputActive = true;
     } else {
         inputActive = false;
@@ -182,20 +182,20 @@ function inBox(x, y, boxRect) {
 
 function drawInputBox() {
     ctx.fillStyle = '#EEEEEE';
-    ctx.fillRect(inputBox.x, inputBox.y, inputBox.width, inputBox.height);
+    ctx.fillRect(carNameInputBox.x, carNameInputBox.y, carNameInputBox.width, carNameInputBox.height);
     ctx.lineWidth = 2;
     ctx.strokeStyle = 'green';
-    ctx.strokeRect(inputBox.x, inputBox.y, inputBox.width, inputBox.height);
+    ctx.strokeRect(carNameInputBox.x, carNameInputBox.y, carNameInputBox.width, carNameInputBox.height);
     ctx.fillStyle = 'green';
     ctx.font = '16px Arial';
-    ctx.fillText(carNameText, inputBox.x + 25, inputBox.y + 20);
+    ctx.fillText(carNameText, carNameInputBox.x + 25, carNameInputBox.y + 20);
 
     if(inputActive) {
         ctx.lineWidth = 2;
         ctx.strokeStyle = 'black';
         ctx.fillStyle = 'black';
         textWidth = ctx.measureText(carNameText).width;
-        ctx.fillRect(inputBox.x + 30 + textWidth, inputBox.y + 5, 2, 20);
+        ctx.fillRect(carNameInputBox.x + 30 + textWidth, carNameInputBox.y + 5, 2, 20);
     }
 }
 

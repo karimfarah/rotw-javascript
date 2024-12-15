@@ -26,14 +26,17 @@ function readGrandJunctionRestStopInput(e) {
     switch (e.key) {
         case '1':
             inRestStop = false;
+            document.removeEventListener('keydown', readGrandJunctionRestStopInput);
             loadCityChanges(City.DENVER);
             break;
         case '2':
             inRestStop = false;
+            document.removeEventListener('keydown', readGrandJunctionRestStopInput);
             loadCityChanges(City.SALT_LAKE_CITY);
             break;
         case '3':
             inRestStop = false;
+            document.removeEventListener('keydown', readGrandJunctionRestStopInput);
             loadCityChanges(City.LAS_VEGAS);
             break;
         case '8':
