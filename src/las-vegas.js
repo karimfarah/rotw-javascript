@@ -136,13 +136,61 @@ async function handleCasinoCanvasClick(event) {
         setChipPlacement(x, y, Placement.RANGE, null, topLineNumbers);
     }
 
-    if (x >= 598 && x <= 598 + 10 && y >= 343 && y <= 343 + 20) {
+    if (x >= 598 && x <= 598 + 15 && y >= 318 && y <= 318 + 20) {
         setChipPlacement(x, y, Placement.RANGE, null, middleLineNumbers);
     }
 
     if (x >= 598 && x <= 598 + 10 && y >= 370 && y <= 370 + 20) {
         setChipPlacement(x, y, Placement.RANGE, null, bottomLineNumbers);
     }
+
+/*
+    if (x >= 356 && x <= 356 + 10 && y >= 318 && y <= 318 + 20) {
+        setChipPlacement(x, y, Placement.NUMBER, 3, bottomLineNumbers);
+    }
+*/
+
+    // 00
+    if (x >= 334 && x <= 334 + 10 && y >= 318 && y <= 318 + 35) {
+        setChipPlacement(x, y, Placement.NUMBER, -1, bottomLineNumbers);
+    }
+
+    // 0
+    if (x >= 334 && x <= 334 + 10 && y >= 356 && y <= 356 + 35) {
+        setChipPlacement(x, y, Placement.NUMBER, 0, bottomLineNumbers);
+    }
+
+
+    // top row numbers
+    let startX = 356;
+    let startY = 318;
+    for(let i = 3; i <= 36; i += 3) {
+        if (x >= startX && x <= startX + 10 && y >= startY && y <= startY + 20) {
+            setChipPlacement(x, y, Placement.NUMBER, i, bottomLineNumbers);
+        }
+        startX += 20;
+    }
+
+    // middle row numbers
+    startX = 356;
+    startY = 343;
+    for(let i = 2; i <= 35; i += 3) {
+        if (x >= startX && x <= startX + 10 && y >= startY && y <= startY + 20) {
+            setChipPlacement(x, y, Placement.NUMBER, i, bottomLineNumbers);
+        }
+        startX += 20;
+    }
+
+    // bottom row numbers
+    startX = 356;
+    startY = 370;
+    for(let i = 1; i <= 34; i += 3) {
+        if (x >= startX && x <= startX + 10 && y >= startY && y <= startY + 20) {
+            setChipPlacement(x, y, Placement.NUMBER, i, bottomLineNumbers);
+        }
+        startX += 20;
+    }
+
 
     if (x >= chassisOptionLocation.x && x <= chassisOptionLocation.x + chassisOptionLocation.width && y >= chassisOptionLocation.y - 25 && y <= chassisOptionLocation.y - 25 + chassisOptionLocation.height) {
     }
@@ -222,6 +270,13 @@ async function handleCasinoCanvasClick(event) {
                     playerWon = true;
                     winFactor = 2;
                 }
+                break;
+            case Placement.NUMBER:
+                if(playerBet.number === spinResult) {
+                    playerWon = true;
+                    winFactor = 35;
+                }
+                break;
             default:
         }
 
@@ -278,8 +333,12 @@ function drawSpinWheelNotification() {
     textY += 50;
 
     ctx.fillStyle = 'black';
-    text = 'Result is: ';
+    text = 'Your Bet: ' + playerBet.bet + ' ' +
+        (playerBet.number !== null ? (playerBet.number === -1 ? '00' : playerBet.number) :
+        (playerBet.bet === Placement.RANGE ? playerBet.numbersList.slice(0,2) + '..' + playerBet.numbersList.slice(-2) : '')) + '';
     ctx.fillText(text, textX, textY); textY += 50;
+
+    let x = (playerBet.number === -1 ? '00' : playerBet.number);
 
     var winColor = 'UNKNOWN';
     if(redNumbers.includes(spinResult)) {
