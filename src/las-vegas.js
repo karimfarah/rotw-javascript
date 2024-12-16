@@ -54,6 +54,7 @@ function readLasVegasRestStopInput(e) {
     switch (e.key) {
         case '1':
             inRestStop = false;
+            player.money -= 200;
             loadCityChanges(City.GRAND_JUNCTION);
             break;
         case '8':

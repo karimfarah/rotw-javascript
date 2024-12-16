@@ -26,9 +26,9 @@ const enemyHeight = 32;
 
 let spriteX = (canvas.width / 2) + 100;
 let spriteY = canvas.height / 2;
-const speed = 10;
+let speed = 10;
 
-var player = { money: 10000, speed: 10, x: spriteX, y: spriteY, hasCar: false, car: null };
+var player = { money: 10000, speed: 5, x: spriteX, y: spriteY, hasCar: false, car: null };
 //var offsetPos = spritePositionToImagePosition(1, 0);
 
 let carSaveError = false;
@@ -56,6 +56,12 @@ function moveSprite(e) {
     let tempCameraY = cameraY;
     var tempSpriteSrc = '';
 
+    if(activeCar !== null) {
+        speed = Math.floor(activeCar.topSpeed / 10);
+    } else {
+        speed = player.speed;
+    }
+
     switch (e.code) {
         case 'ArrowUp':
             tempY -= speed;
@@ -79,7 +85,12 @@ function moveSprite(e) {
             break;
     }
 
-    const color = getColorAt(tempX + (spriteWidth / 2) - 1, tempY - 10);
+    //const color = getColorAt(tempX + (spriteWidth / 2) - 1, tempY - 10);
+    var getX = tempX;
+    var getY = tempY;
+
+    const color = getColorAt(getX, getY);
+    //const color = getColorAt(tempX + (spriteWidth / 2) - 1, tempY - 10);
     // console.log(`Color sprite (${tempX}, ${tempY}): rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`);
     // console.log(`Color camera (${cameraX}, ${cameraY}): rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`);
     if (color.r === 0 && color.g === 0 && color.b === 0) {

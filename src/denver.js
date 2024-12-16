@@ -42,10 +42,12 @@ function readDenverRestStopInput(e) {
     switch (e.key) {
         case '1':
             inRestStop = false;
+            player.money -= 200;
             loadCityChanges(City.CHEYENNE);
             break;
         case '4':
             inRestStop = false;
+            player.money -= 200;
             document.removeEventListener('keydown', readDenverRestStopInput);
             loadCityChanges(City.GRAND_JUNCTION);
             break;

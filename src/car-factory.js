@@ -20,6 +20,7 @@ var weaponTopOptionLocation = { x: 0, y: 0, width: 150, height: 25  };
 var costLocation = { x: 0, y: 0 };
 var moneyLocation = { x: 0, y: 0 };
 
+var activeCar = null;
 
 var playerCar = { cost: 1000, maxWeight: 5000, currentWeight: 0, maxSpace: 100, currentSpace: 10, topSpeed: 50,
     body: Body.SUBCOMPACT, chassis: LightChassis, fusionEngine: SmallEngine , tires: StandardTires,
@@ -132,6 +133,7 @@ function handleCanvasClick(event) {
         }
 
         playerCar = tempCar;
+        activeCar = playerCar;
         player.hasCar = true;
         player.car = playerCar;
         sprite.src = '/src/img/car-sprite-forward.png';
@@ -328,6 +330,8 @@ function drawBuildCarMenu() {
     /** ARMOR **/
     var armorY = textY;
     var armorX = textX + 210;
+    var armorInputY = armorY;
+    var armorInputX = armorX + 25;
     text = "Armr St Bt";
     ctx.fillText(text, armorX, armorY);  armorY += 25;
     text = "F:";
@@ -449,6 +453,9 @@ function drawBuildCarMenu() {
 
     text = '[' + tempCar.weaponTop.NAME + ']';
     ctx.fillText(text, weaponTopOptionLocation.x, weaponTopOptionLocation.y);
+
+    text = '[' + tempCar.armorFront + ']';
+    ctx.fillText(text, armorInputX, armorInputY); armorInputX += 25;
 
     /** DERIVED VALUES FROM USER INPUT **/
     ctx.fillStyle = '#FFFFFF';

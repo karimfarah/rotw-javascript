@@ -22,6 +22,7 @@ function readCheyenneRestStopInput(e) {
     switch (e.key) {
         case '1':
             inRestStop = false;
+            player.money -= 200;
             loadCityChanges(City.DENVER);
             break;
         case '8':
