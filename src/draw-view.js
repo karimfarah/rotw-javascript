@@ -9,6 +9,8 @@ function drawLocationMenu() {
         //drawDropdownButton();
     } else if(inCasino) {
         drawCasinoMenu();
+    } else if(inDustRunners) {
+        drawDustRunnersMenu();
     }
 }
 

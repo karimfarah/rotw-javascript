@@ -14,6 +14,7 @@ var inRestStop = false;
 var inTransition = false;
 var inFactory = false;
 var inCasino = false;
+var inDustRunners = false;
 
 const sprite = new Image();
 sprite.src = '/src/img/sprite-facing.png';
@@ -28,7 +29,7 @@ let spriteX = (canvas.width / 2) + 100;
 let spriteY = canvas.height / 2;
 let speed = 10;
 
-var player = { money: 10000, speed: 5, x: spriteX, y: spriteY, hasCar: false, car: null };
+var player = { money: 10000, xp: 0, speed: 5, x: spriteX, y: spriteY, hasCar: false, car: null };
 //var offsetPos = spritePositionToImagePosition(1, 0);
 
 let carSaveError = false;
@@ -40,6 +41,7 @@ let enemyArray = [];
 const townBackground = new Image();
 townBackground.src = denverBackground.src; // replace with your town background image path
 var currentCity = City.DENVER;
+let jobSelection = 0;
 
 /** STARTING ROAD ***/
 const roadBackground = new Image();
@@ -49,100 +51,7 @@ var cameraY = 0;
 
 document.addEventListener('keydown', moveSprite);
 
-function moveSprite(e) {
-    let tempX = spriteX;
-    let tempY = spriteY;
-    let tempCameraX = cameraX;
-    let tempCameraY = cameraY;
-    var tempSpriteSrc = '';
 
-    if(activeCar !== null) {
-        speed = Math.floor(activeCar.topSpeed / 10);
-    } else {
-        speed = player.speed;
-    }
-
-    switch (e.code) {
-        case 'ArrowUp':
-            tempY -= speed;
-            tempCameraY -= speed;
-            tempSpriteSrc = '/src/img/car-sprite-forward.png';
-            break;
-        case 'ArrowDown':
-            tempY += speed;
-            tempCameraY += speed;
-            tempSpriteSrc = '/src/img/car-sprite-down.png';
-            break;
-        case 'ArrowLeft':
-            tempX -= speed;
-            tempCameraX -= speed;
-            tempSpriteSrc = '/src/img/car-sprite-left.png';
-            break;
-        case 'ArrowRight':
-            tempX += speed;
-            tempCameraX += speed;
-            tempSpriteSrc = '/src/img/car-sprite-right.png';
-            break;
-    }
-
-    //const color = getColorAt(tempX + (spriteWidth / 2) - 1, tempY - 10);
-    var getX = tempX;
-    var getY = tempY;
-
-    const color = getColorAt(getX, getY);
-    //const color = getColorAt(tempX + (spriteWidth / 2) - 1, tempY - 10);
-    // console.log(`Color sprite (${tempX}, ${tempY}): rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`);
-    // console.log(`Color camera (${cameraX}, ${cameraY}): rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`);
-    if (color.r === 0 && color.g === 0 && color.b === 0) {
-        if(currentCity === City.NONE) {
-            cameraX = tempCameraX;
-            cameraY = tempCameraY;
-        } else {
-            spriteX = tempX;
-            spriteY = tempY;
-        }
-
-        if(player.hasCar === true) {
-            sprite.src = tempSpriteSrc;
-        } else {
-
-        }
-
-        checkPlayerLocation();
-    }
-
-}
-
-function checkPlayerLocation() {
-    if (currentRoad === Road.NONE) {
-        switch (currentCity) {
-            case City.DENVER:
-                checkDenverLocations();
-                break;
-            case City.CHEYENNE:
-                checkCheyenneLocations();
-                break;
-            case City.GRAND_JUNCTION:
-                checkGrandJunctionLocations();
-                break;
-            case City.LAS_VEGAS:
-                checkLasVegasLocations();
-                break;
-        }
-    } else {
-        switch (currentRoad) {
-            case Road.I25_NORTH:
-                checkI25NorthLocations();
-                break;
-            case Road.I70_WEST:
-                checkI70WestLocations();
-                break;
-            case Road.I15_SOUTH:
-                checkI15SouthLocations();
-                break;
-        }
-    }
-}
 
 
 
