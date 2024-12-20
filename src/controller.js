@@ -5,8 +5,8 @@ function moveSprite(e) {
     let tempCameraY = cameraY;
     var tempSpriteSrc = '';
 
-    if(activeCar !== null) {
-        speed = Math.floor(activeCar.topSpeed / 10);
+    if(player.car !== null) {
+        speed = Math.floor(player.car.topSpeed / 10);
     } else {
         speed = player.speed;
     }
@@ -32,6 +32,8 @@ function moveSprite(e) {
             tempCameraX += speed;
             tempSpriteSrc = '/src/img/car-sprite-right.png';
             break;
+        default:
+            break;
     }
 
     //const color = getColorAt(tempX + (spriteWidth / 2) - 1, tempY - 10);
@@ -51,7 +53,7 @@ function moveSprite(e) {
             spriteY = tempY;
         }
 
-        if(player.hasCar === true) {
+        if(player.car !== null) {
             sprite.src = tempSpriteSrc;
         } else {
 
@@ -98,7 +100,19 @@ async function loadCityChanges(cityLocation) {
     currentCity = cityLocation;
     inTransition = true;
 
-    jobSelection = getRandomInt(0, starterDustRunnerJobs.length - 1);
+    let safetyCheck = 0;
+    randomJobList = [];
+    for(let i = 0; i < 4; i++) {
+        let freeSlotFound = false;
+        while (!freeSlotFound && safetyCheck < 100) {
+            let randNum = getRandomInt(0, starterDustRunnerJobs.length - 1);
+            if(!randomJobList.includes(randNum)) {
+                randomJobList.push(randNum);
+                freeSlotFound = true;
+            }
+            safetyCheck++;
+        }
+    }
 
     switch(currentCity) {
         case City.DENVER:

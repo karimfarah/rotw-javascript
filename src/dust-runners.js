@@ -10,6 +10,11 @@ let starterDustRunnerJobs = [
     { minExp: 0, sourceCity: City.CHEYENNE, destinationCity: City.DENVER, destBuilding: Building.SCRAP_YARD, item: "Scrap Metal", payout: 400, space: 150, weight: 150 }
 ];
 
+let job1 = null;
+let job2 = null;
+let job3 = null;
+let job4 = null;
+
 function drawDustRunnersMenu() {
     var boxWidth = canvas.width - 100;
     var boxHeight = canvas.height - 100;
@@ -36,32 +41,55 @@ function drawDustRunnersMenu() {
     ctx.textAlign = 'left';
 
     var textX = boxX + 100;
-    var textY = boxY + 175;
+    var textY = boxY + 150;
     var text = 'DUST RUNNERS MENU:';
     ctx.fillText(text, textX, textY);
-    textY += 50;
+    textY += 25;
 
     var text = '== JOBS ==';
     ctx.fillText(text, textX, textY);
     textY += 25;
-    let job = starterDustRunnerJobs[jobSelection];
+    job1 = starterDustRunnerJobs[randomJobList[0]];
+    job2 = starterDustRunnerJobs[randomJobList[1]];
+    job3 = starterDustRunnerJobs[randomJobList[2]];
+    job4 = starterDustRunnerJobs[randomJobList[3]];
     switch (currentCity) {
         case City.DENVER:
-            text = '    1. ' + job.sourceCity + ' --> ' + job.destinationCity + ' - ' + job.destBuilding;
+            text = '    1. ' + job1.sourceCity + ' --> ' + job1.destinationCity + ' - ' + job1.destBuilding + ' (' +  job1.payout + 'gc)';
+            ctx.fillStyle = 'green';
             ctx.fillText(text, textX, textY);
             textY += 25;
-            text = '        (' + job.item + ' lbs:' + job.weight + ' sp:' + job.space + ' payout:' + job.payout + ')';
+            text = '        (' + job1.item + ' lbs:' + job1.weight + ' sp:' + job1.space + ')';
+            ctx.fillStyle = 'black';
             ctx.fillText(text, textX, textY);
             textY += 25;
 
-            text = '    2. Denver --> Sante Fe 200qc';
+            text = '    2. ' + job2.sourceCity + ' --> ' + job2.destinationCity + ' - ' + job2.destBuilding + ' (' +  job2.payout + 'gc)';
+            ctx.fillStyle = 'green';
             ctx.fillText(text, textX, textY);
             textY += 25;
-            text = '    3. Denver --> Kansas City 200qc';
+            text = '        (' + job2.item + ' lbs:' + job2.weight + ' sp:' + job2.space + ')';
+            ctx.fillStyle = 'black';
             ctx.fillText(text, textX, textY);
             textY += 25;
-            text = '    4. Denver --> Grand Junction 200qc';
-            ctx.fillText(text, textX, textY); textY += 50;
+
+            text = '    3. ' + job3.sourceCity + ' --> ' + job3.destinationCity + ' - ' + job3.destBuilding + ' (' +  job3.payout + 'gc)';
+            ctx.fillStyle = 'green';
+            ctx.fillText(text, textX, textY);
+            textY += 25;
+            text = '        (' + job3.item + ' lbs:' + job3.weight + ' sp:' + job3.space + ')';
+            ctx.fillStyle = 'black';
+            ctx.fillText(text, textX, textY);
+            textY += 25;
+
+            text = '    4. ' + job4.sourceCity + ' --> ' + job4.destinationCity + ' - ' + job4.destBuilding + ' (' +  job4.payout + 'gc)';
+            ctx.fillStyle = 'green';
+            ctx.fillText(text, textX, textY);
+            textY += 25;
+            text = '        (' + job4.item + ' lbs:' + job4.weight + ' sp:' + job4.space + ')';
+            ctx.fillStyle = 'black';
+            ctx.fillText(text, textX, textY);
+            textY += 25;
             break;
         case City.SANTE_FE:
             text = '    1. Sante Fe --> Denver 200qc';
@@ -121,4 +149,16 @@ function drawDustRunnersMenu() {
     text = '8. Leave Dust Runners';
     ctx.fillText(text, textX, textY);
 
+}
+
+function deliverJob(city, building) {
+    if(player.car === null || player.car.currentJob === null) {
+        return;
+    }
+
+    if(player.car.currentJob.destinationCity === city &&
+        player.car.currentJob.destBuilding === building) {
+        player.money += player.car.currentJob.payout;
+        player.car.currentJob = null;
+    }
 }

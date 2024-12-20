@@ -14,7 +14,9 @@ var inRestStop = false;
 var inTransition = false;
 var inFactory = false;
 var inCasino = false;
+var inGarage = false;
 var inDustRunners = false;
+var roadConditionReport = false;
 
 const sprite = new Image();
 sprite.src = '/src/img/sprite-facing.png';
@@ -41,7 +43,7 @@ let enemyArray = [];
 const townBackground = new Image();
 townBackground.src = denverBackground.src; // replace with your town background image path
 var currentCity = City.DENVER;
-let jobSelection = 0;
+let randomJobList = [0, 1, 2, 3];
 
 /** STARTING ROAD ***/
 const roadBackground = new Image();

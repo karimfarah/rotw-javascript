@@ -20,12 +20,31 @@ var weaponTopOptionLocation = { x: 0, y: 0, width: 150, height: 25  };
 var costLocation = { x: 0, y: 0 };
 var moneyLocation = { x: 0, y: 0 };
 
-var activeCar = null;
-
 var playerCar = { cost: 1000, maxWeight: 5000, currentWeight: 0, maxSpace: 100, currentSpace: 10, topSpeed: 50,
+    currentJob: null, name: null,
     body: Body.SUBCOMPACT, chassis: LightChassis, fusionEngine: SmallEngine , tires: StandardTires,
     weaponFront: Weapon.NONE, weaponBack: Weapon.NONE, weaponLeft: Weapon.NONE, weaponRight: Weapon.NONE,
     weaponTop: Weapon.NONE };
+
+function Car(car) {
+    this.cost = car.cost;
+    this.maxWeight = car.maxWeight;
+    this.currentWeight = car.currentWeight;
+    this.maxSpace = car.maxSpace;
+    this.currentSpace = car.currentSpace;
+    this.topSpeed = car.topSpeed;
+    this.currentJob = car.currentJob;
+    this.name = car.name;
+    this.body = car.body;
+    this.chassis = car.chassis;
+    this.fusionEngine = car.fusionEngine;
+    this.tires = car.tires;
+    this.weaponFront = car.weaponFront;
+    this.weaponBack = car.weaponBack;
+    this.weaponLeft = car.weaponLeft;
+    this.weaponRight = car.weaponRight;
+    this.weaponTop = car.weaponTop;
+}
 
 var tempCar;
 
@@ -132,10 +151,17 @@ function handleCanvasClick(event) {
             return;
         }
 
+        storeCarInGarage();
+
+        tempCar.name = carNameText;
         playerCar = tempCar;
-        activeCar = playerCar;
+        player.car = new Car(tempCar);
+
+        player.money -= tempCar.cost;
+        tempCar = null;
+        carNameText = '';
+
         player.hasCar = true;
-        player.car = playerCar;
         sprite.src = '/src/img/car-sprite-forward.png';
         inFactory = false;
         inputActive = false;

@@ -1,4 +1,5 @@
 let spinWheel = false;
+let jobConfirmError = false;
 
 function drawLocationMenu() {
     if(inRestStop) {
@@ -11,6 +12,8 @@ function drawLocationMenu() {
         drawCasinoMenu();
     } else if(inDustRunners) {
         drawDustRunnersMenu();
+    } else if(inGarage) {
+        drawGarageMenu();
     }
 }
 
@@ -115,6 +118,97 @@ async function drawTransitionMenu() {
     }
 }
 
+function drawCarStatusWindow() {
+    var statusWidth = 100;
+    var statusHeight = 150;
+    var statusX = 680;
+    var statusY = 20;
+
+    ctx.fillStyle = 'white';
+    ctx.fillRect(statusX, statusY, statusWidth, statusHeight);
+
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(statusX, statusY, statusWidth, statusHeight);
+
+    ctx.font = '10px Verdana';
+    ctx.fillStyle = 'black';
+    ctx.textAlign = 'left';
+
+    var textX = statusX + 5;
+    var textY = statusY + 10;
+    var text = 'Driving: ' + (player.car !== null && player.car.name !== null ? player.car.name.slice(0,9) : '');
+    ctx.fillText(text, textX, textY);
+    textY += 20;
+
+    text = 'Front:';
+    ctx.fillText(text, textX, textY);
+    textY += 10;
+
+    text = 'Back:';
+    ctx.fillText(text, textX, textY);
+    textY += 10;
+
+    text = 'Left:';
+    ctx.fillText(text, textX, textY);
+    textY += 10;
+
+    text = 'Right:';
+    ctx.fillText(text, textX, textY);
+    textY += 10;
+}
+
+function drawActiveJobWindow() {
+    var statusWidth = 300;
+    var statusHeight = 20;
+    var statusX = 20;
+    var statusY = 570;
+
+    ctx.fillStyle = 'white';
+    ctx.fillRect(statusX, statusY, statusWidth, statusHeight);
+
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(statusX, statusY, statusWidth, statusHeight);
+
+    ctx.font = '10px Verdana';
+    ctx.fillStyle = 'black';
+    ctx.textAlign = 'left';
+
+    var textX = statusX + 5;
+    var textY = statusY + 10;
+    let jobDetails = (player.car !== null && player.car.currentJob !== null ?
+                             player.car.currentJob.item + ' To: ' + player.car.currentJob.destinationCity + ' - ' + player.car.currentJob.destBuilding
+                                : 'None')
+    var text = 'Active Job: ' + jobDetails;
+    ctx.fillText(text, textX, textY);
+    textY += 10;
+}
+
+function drawPLayerStatusWindow() {
+    var statusWidth = 140;
+    var statusHeight = 20;
+    var statusX = 20;
+    var statusY = 20;
+
+    ctx.fillStyle = 'white';
+    ctx.fillRect(statusX, statusY, statusWidth, statusHeight);
+
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(statusX, statusY, statusWidth, statusHeight);
+
+    ctx.font = '10px Verdana';
+    ctx.fillStyle = 'black';
+    ctx.textAlign = 'left';
+
+    var textX = statusX + 5;
+    var textY = statusY + 10;
+    var text = 'Money (qc): ' + player.money;
+    ctx.fillText(text, textX, textY);
+    textY += 10;
+}
+
 async function drawNotificationWindow() {
     var popUpWidth = canvas.width - 300;
     var popUpHeight = canvas.height - 300;
@@ -152,6 +246,8 @@ async function drawNotificationWindow() {
         ctx.fillText(text, textX, textY); textY += 25;
     } else if(spinWheel) {
         drawSpinWheelNotification();
+    } else if(jobConfirmError) {
+        drawJobConfirmError();
     }
 }
 
@@ -187,6 +283,7 @@ function draw() {
             }
         }
 
+        drawCarStatusWindow();
     } else {
         ctx.drawImage(townBackground, 0, 0, canvas.width, canvas.height);
         ctx.drawImage(sprite, spriteX, spriteY, spriteWidth, spriteHeight);
@@ -195,6 +292,9 @@ function draw() {
         drawTransitionMenu();
         drawNotificationWindow();
     }
+
+    drawPLayerStatusWindow();
+    drawActiveJobWindow();
 
     requestAnimationFrame(draw);
 }

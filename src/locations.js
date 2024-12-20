@@ -24,6 +24,7 @@ const Building = Object.freeze({
     DUST_RUNNERS: 'Dust Runners',
     SCRAP_YARD: 'Scrap Yard',
     RUSTYS: 'Rustys',
+    REST_STOP: 'Rest Stop',
     FACTORY: 'Factory',
     WASTELANDERS: 'Wastelanders',
     MED: 'Medical',

@@ -18,3 +18,8 @@ function getColorAt(x, y) {
         r: data[0], g: data[1], b: data[2], a: data[3]
     };
 }
+
+// Function to remove a specific element by value
+function removeElementByValue(arr, index) {
+    arr.splice(index, 1);
+}
