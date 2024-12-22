@@ -22,7 +22,7 @@ function drawCar() {
     ctx.fillRect(car.x, car.y, car.width, car.height);
 }
 
-function drawBullets() {
+function drawBulletsXX() {
     ctx.fillStyle = 'red';
     bullets.forEach((bullet, index) => {
         bullet.y -= bulletSpeed;
@@ -36,7 +36,7 @@ function drawBullets() {
 function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawCar();
-    drawBullets();
+    drawBulletsXX();
     requestAnimationFrame(update);
 }
 

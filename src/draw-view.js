@@ -296,6 +296,8 @@ function draw() {
     drawPLayerStatusWindow();
     drawActiveJobWindow();
 
+    drawBullets();
+
     requestAnimationFrame(draw);
 }
 

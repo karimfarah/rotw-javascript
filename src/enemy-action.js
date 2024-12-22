@@ -1,9 +1,49 @@
+let bullets = [];
+let bulletSpeed = 5;
+
 function calculateAngle(x1, y1, x2, y2) {
     const deltaX = x2 - x1;
     const deltaY = y2 - y1;
     const angleInRadians = Math.atan2(deltaY, deltaX);
     const angleInDegrees = angleInRadians * (180 / Math.PI);
     return angleInDegrees;
+}
+
+
+
+function drawBullets() {
+    ctx.fillStyle = 'red';
+    bullets.forEach((bullet, index) => {
+
+        angle = bullet.angle;
+
+        if(angle >= -22.5 && angle <= 22.5) {
+            bullet.x -= bulletSpeed;
+        } else if(angle >= 22.5 && angle <= 67.5) {
+            bullet.y -= bulletSpeed;
+            bullet.x -= bulletSpeed;
+        } else if(angle >= 67.5 && angle <= 112.5) {
+            bullet.y -= bulletSpeed;
+        } else if(angle >= 112.5 && angle <= 157.5) {
+            bullet.y -= bulletSpeed;
+            bullet.x += bulletSpeed;
+        } else if((angle >= 157.5 && angle <= 180) || (angle >= -180 && angle <= -157.5)) {
+            bullet.x += bulletSpeed;
+        } else if(angle >= -157.5 && angle <= -112.5) {
+            bullet.y += bulletSpeed;
+            bullet.x += bulletSpeed;
+        } else if(angle >= -112.5 && angle <= -67.5) {
+            bullet.y += bulletSpeed;
+        } else if(angle >= -67.5 && angle <= -22.5) {
+            bullet.y += bulletSpeed;
+            bullet.x -= bulletSpeed;
+        }
+
+        if (bullet.y < 0 || bullet.y > 6000 || bullet.x < 0 || bullet > 8000) {
+            bullets.splice(index, 1);
+        }
+        ctx.fillRect(bullet.x - cameraX + (canvas.width/2), bullet.y - cameraY + (canvas.height/2), bullet.width, bullet.height);
+    });
 }
 
 function enemyAction(playerX, playerY, enemy) {
@@ -63,7 +103,7 @@ function enemyAction(playerX, playerY, enemy) {
             enemy.y = tempY;
 
             let angle = calculateAngle(enemy.x, enemy.y, enemy.prevX, enemy.prevY);
-            console.log("angle: " + angle);
+            //console.log("angle: " + angle);
             if(angle >= -22.5 && angle <= 22.5) {
                 enemy.carSprite.src = '/src/img/maroon-racer-left.png';
             } else if(angle >= 22.5 && angle <= 67.5) {
@@ -81,6 +121,13 @@ function enemyAction(playerX, playerY, enemy) {
             } else if(angle >= -67.5 && angle <= -22.5) {
                 enemy.carSprite.src = '/src/img/maroon-racer-lower-left.png';
             }
+
+            if(playerX <= enemy.x + 200 && playerX >= enemy.x - 200 &&
+                playerY <= enemy.y + 150 && playerY >= enemy.y - 150) {
+                bullets.push({x: enemy.x + 16, y: enemy.y, width: 2, height: 2, angle: angle});
+            }
+
+            //drawBullets();
         }
     }
 }
