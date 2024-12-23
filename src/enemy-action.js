@@ -42,8 +42,24 @@ function drawBullets() {
         if (bullet.y < 0 || bullet.y > 6000 || bullet.x < 0 || bullet > 8000) {
             bullets.splice(index, 1);
         }
+
         ctx.fillRect(bullet.x - cameraX + (canvas.width/2), bullet.y - cameraY + (canvas.height/2), bullet.width, bullet.height);
+
+        if(playerImpact(bullet)) {
+            ctx.fillRect(bullet.x - cameraX + (canvas.width/2), bullet.y - cameraY + (canvas.height/2), bullet.width*5, bullet.height*5);
+            bullets.splice(index, 1);
+        }
     });
+}
+
+function playerImpact(bullet) {
+    let distance = Math.sqrt((bullet.x - (cameraX+16)) ** 2 + (bullet.y - (cameraY+16)) ** 2);
+    if(distance < 16) {
+        console.log('IMPACT');
+        return true;
+    }
+
+    return false;
 }
 
 function enemyAction(playerX, playerY, enemy) {
@@ -124,7 +140,7 @@ function enemyAction(playerX, playerY, enemy) {
 
             if(playerX <= enemy.x + 200 && playerX >= enemy.x - 200 &&
                 playerY <= enemy.y + 150 && playerY >= enemy.y - 150) {
-                bullets.push({x: enemy.x + 16, y: enemy.y, width: 2, height: 2, angle: angle});
+                bullets.push({x: enemy.x + 16, y: enemy.y + 16, width: 2, height: 2, angle: angle});
             }
 
             //drawBullets();
