@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Counter</title>
+    <script>
+        window.onload = function() {
+            let visitCount = localStorage.getItem('visitCount');
+            if (visitCount) {
+
+            } else {
+                visitCount = 1;
+            }
+            localStorage.setItem('visitCount', visitCount);
+
+            document.getElementById('visitCount').innerText = "Users Visited " + visitCount + " times.";
+        };
+    </script>
+</head>
+<body>
+<h1>Retro 80s Riders of the Wasteland Users</h1>
+<p id="visitCount"></p>
+</body>
+</html>
