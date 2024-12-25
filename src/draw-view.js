@@ -141,19 +141,39 @@ function drawCarStatusWindow() {
     ctx.fillText(text, textX, textY);
     textY += 20;
 
-    text = 'Front:';
+    if(player.car === null) {
+        return;
+    }
+
+    ctx.fillStyle = 'black';
+    if(player.car.frontArmor < 25) {
+        ctx.fillStyle = 'red';
+    }
+    text = 'Front: ' + player.car.frontArmor;
     ctx.fillText(text, textX, textY);
     textY += 10;
 
-    text = 'Back:';
+    ctx.fillStyle = 'black';
+    if(player.car.backArmor < 25) {
+        ctx.fillStyle = 'red';
+    }
+    text = 'Back: ' + player.car.backArmor;
     ctx.fillText(text, textX, textY);
     textY += 10;
 
-    text = 'Left:';
+    ctx.fillStyle = 'black';
+    if(player.car.leftArmor < 25) {
+        ctx.fillStyle = 'red';
+    }
+    text = 'Left: ' + player.car.leftArmor;
     ctx.fillText(text, textX, textY);
     textY += 10;
 
-    text = 'Right:';
+    ctx.fillStyle = 'black';
+    if(player.car.rightArmor < 25) {
+        ctx.fillStyle = 'red';
+    }
+    text = 'Right: ' + player.car.rightArmor;
     ctx.fillText(text, textX, textY);
     textY += 10;
 }
@@ -187,7 +207,7 @@ function drawActiveJobWindow() {
 
 function drawPLayerStatusWindow() {
     var statusWidth = 140;
-    var statusHeight = 20;
+    var statusHeight = 50;
     var statusX = 20;
     var statusY = 20;
 
@@ -205,6 +225,19 @@ function drawPLayerStatusWindow() {
     var textX = statusX + 5;
     var textY = statusY + 10;
     var text = 'Money (qc): ' + player.money;
+    ctx.fillText(text, textX, textY);
+    textY += 10;
+
+    ctx.fillStyle = 'black';
+    if(player.health < 25) {
+        ctx.fillStyle = 'red';
+    }
+    text = 'Health: ' + player.health;
+    ctx.fillText(text, textX, textY);
+    textY += 10;
+
+    ctx.fillStyle = 'black';
+    text = 'XP: ' + player.xp;
     ctx.fillText(text, textX, textY);
     textY += 10;
 }
@@ -268,36 +301,80 @@ function isObjectInView(locX, locY, camX, camY, width, height) {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Large map tile scrolling vs single screen city map
-    if(currentCity === City.NONE) {
-        //console.log('cameraX: ' + cameraX + ',' + cameraY);
-        ctx.drawImage(roadBackground, cameraX, cameraY, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
-        ctx.drawImage(sprite, (canvas.width/2), (canvas.height/2), spriteWidth, spriteHeight);
+    if(!gameOver) {
+        // Large map tile scrolling vs single screen city map
+        if (currentCity === City.NONE) {
+            //console.log('cameraX: ' + cameraX + ',' + cameraY);
+            ctx.drawImage(roadBackground, cameraX, cameraY, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
+            ctx.drawImage(sprite, (canvas.width / 2), (canvas.height / 2), spriteWidth, spriteHeight);
 
-        //ctx.drawImage(enemySprite, enemySprite.x, enemySprite.y, enemyWidth, enemyHeight);
-        for(let enemy of enemyArray) {
-            enemyAction(cameraX, cameraY, enemy);
+            //ctx.drawImage(enemySprite, enemySprite.x, enemySprite.y, enemyWidth, enemyHeight);
+            for (let enemy of enemyArray) {
+                enemyAction(cameraX, cameraY, enemy);
 
-            if (isObjectInView(enemy.x, enemy.y, cameraX, cameraY, canvas.width, canvas.height)) {
-                ctx.drawImage(enemy.carSprite, (enemy.x - cameraX + (canvas.width/2)), (enemy.y - cameraY + (canvas.height/2)), enemyWidth, enemyHeight);
+                if (isObjectInView(enemy.x, enemy.y, cameraX, cameraY, canvas.width, canvas.height)) {
+                    ctx.drawImage(enemy.carSprite, (enemy.x - cameraX + (canvas.width / 2)), (enemy.y - cameraY + (canvas.height / 2)), enemyWidth, enemyHeight);
+                }
             }
+
+            drawCarStatusWindow();
+        } else {
+            ctx.drawImage(townBackground, 0, 0, canvas.width, canvas.height);
+            ctx.drawImage(sprite, spriteX, spriteY, spriteWidth, spriteHeight);
+
+            drawLocationMenu();
+            drawTransitionMenu();
+            drawNotificationWindow();
         }
 
-        drawCarStatusWindow();
+        drawDroppedItems();
+
+        drawPLayerStatusWindow();
+        drawActiveJobWindow();
+
+        drawBullets();
+
     } else {
-        ctx.drawImage(townBackground, 0, 0, canvas.width, canvas.height);
-        ctx.drawImage(sprite, spriteX, spriteY, spriteWidth, spriteHeight);
-
-        drawLocationMenu();
-        drawTransitionMenu();
-        drawNotificationWindow();
+        drawGameOver();
     }
-
-    drawPLayerStatusWindow();
-    drawActiveJobWindow();
-
-    drawBullets();
 
     requestAnimationFrame(draw);
 }
 
+async function drawGameOver() {
+    var popUpWidth = canvas.width - 300;
+    var popUpHeight = canvas.height - 300;
+    var popUpX = (canvas.width - popUpWidth) / 2;
+    var popUpY = ((canvas.height - popUpHeight) / 2) - 25;
+
+    ctx.fillStyle = 'white';
+    ctx.fillRect(popUpX, popUpY, popUpWidth, popUpHeight);
+
+    ctx.strokeStyle = 'grey';
+    ctx.lineWidth = 25;
+    ctx.strokeRect(popUpX, popUpY, popUpWidth, popUpHeight);
+
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(popUpX, popUpY, popUpWidth, popUpHeight);
+
+    ctx.font = '20px Verdana';
+    ctx.fillStyle = 'white';
+    ctx.textAlign = 'left';
+
+    var textX = popUpX + 50;
+    var textY = popUpY + 50;
+    ctx.fillStyle = '#FF0000';
+    var text = 'YOU DIED';
+    ctx.fillText(text, textX, textY);
+    textY += 50;
+
+    ctx.fillStyle = 'black';
+    var text = 'Game Over';
+    ctx.fillText(text, textX, textY);
+    textY += 25;
+
+    text = 'The Wastelands Consume You';
+    ctx.fillText(text, textX, textY);
+    textY += 25;
+}

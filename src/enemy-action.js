@@ -1,6 +1,8 @@
 let bullets = [];
 let bulletSpeed = 5;
 
+let droppedItems = [];
+
 function calculateAngle(x1, y1, x2, y2) {
     const deltaX = x2 - x1;
     const deltaY = y2 - y1;
@@ -10,12 +12,22 @@ function calculateAngle(x1, y1, x2, y2) {
 }
 
 
+function drawDroppedItems() {
+    droppedItems.forEach((droppedItem, index) => {
+        let image = new Image();
+        image.src = droppedItem.src;
+        ctx.drawImage(image, droppedItem.x - cameraX + (canvas.width/2), droppedItem.y - cameraY + (canvas.height/2), spriteWidth, spriteHeight);
+    });
+}
 
 function drawBullets() {
     ctx.fillStyle = 'red';
     bullets.forEach((bullet, index) => {
 
         angle = bullet.angle;
+
+        bullet.prevX = bullet.x;
+        bullet.prevY = bullet.y;
 
         if(angle >= -22.5 && angle <= 22.5) {
             bullet.x -= bulletSpeed;
@@ -47,6 +59,7 @@ function drawBullets() {
 
         if(playerImpact(bullet)) {
             ctx.fillRect(bullet.x - cameraX + (canvas.width/2), bullet.y - cameraY + (canvas.height/2), bullet.width*5, bullet.height*5);
+            calculatePlayerDamage(bullet);
             bullets.splice(index, 1);
         }
     });
@@ -55,11 +68,64 @@ function drawBullets() {
 function playerImpact(bullet) {
     let distance = Math.sqrt((bullet.x - (cameraX+16)) ** 2 + (bullet.y - (cameraY+16)) ** 2);
     if(distance < 16) {
-        console.log('IMPACT');
         return true;
     }
 
     return false;
+}
+
+function calculatePlayerDamage(bullet) {
+    //let angle = calculateAngle(player.x, player.y, bulletX, bulletY);
+    //console.log("angle: " + angle);
+    let bulletRelX = (bullet.prevX - cameraX + (canvas.width/2));
+    let bulletRelY = (bullet.prevY - cameraY + (canvas.height/2));
+    let angle = calculateAngle(spriteX, spriteY, bulletRelX, bulletRelY);
+
+    if(player.car === null) {
+        player.health -= 1;
+
+        if(player.health <= 0) {
+            gameOver = true;
+        }
+
+        return;
+    }
+
+    console.log(spriteX + 16, spriteY + 16, bulletRelX, bulletRelY, angle);
+    if(angle >= -22.5 && angle <= 22.5) {
+        console.log('left panel hit');
+        player.car.leftArmor -= 1;
+    } else if(angle >= 22.5 && angle <= 67.5) {
+        console.log('left or front panel hit');
+        getRandomInt(1,2) === 1 ? player.car.leftArmor -= 1 : player.car.frontArmor -= 1
+    } else if(angle >= 67.5 && angle <= 112.5) {
+        console.log('front panel hit');
+        player.car.frontArmor -= 1;
+    } else if(angle >= 112.5 && angle <= 157.5) {
+        console.log('right or front panel hit');
+        getRandomInt(1,2) === 1 ? player.car.rightArmor -= 1 : player.car.frontArmor -= 1
+    } else if((angle >= 157.5 && angle <= 180) || (angle >= -180 && angle <= -157.5)) {
+        console.log('right panel hit');
+        player.car.rightArmor -= 1;
+    } else if(angle >= -157.5 && angle <= -112.5) {
+        console.log('right or back panel hit');
+        getRandomInt(1,2) === 1 ? player.car.rightArmor -= 1 : player.car.backArmor -= 1
+    } else if(angle >= -112.5 && angle <= -67.5) {
+        console.log('back panel hit');
+        player.car.backArmor -= 1;
+    } else if(angle >= -67.5 && angle <= -22.5) {
+        console.log('left or back panel hit');
+        getRandomInt(1,2) === 1 ? player.car.leftArmor -= 1 : player.car.backArmor -= 1
+    }
+
+    if(player.car.frontArmor <= 0 || player.car.backArmor <= 0 ||
+       player.car.leftArmor <= 0  || player.car.rightArmor <= 0) {
+        player.car = null;
+        sprite.src = '/src/img/sprite-facing.png';
+        droppedItems.push({x: bullet.x, y: bullet.y, src: '/src/img/car-destroyed.png'});
+    } else {
+        console.log(player.car.frontArmor, player.car.backArmor, player.car.leftArmor, player.car.rightArmor);
+    }
 }
 
 function enemyAction(playerX, playerY, enemy) {
@@ -140,7 +206,7 @@ function enemyAction(playerX, playerY, enemy) {
 
             if(playerX <= enemy.x + 200 && playerX >= enemy.x - 200 &&
                 playerY <= enemy.y + 150 && playerY >= enemy.y - 150) {
-                bullets.push({x: enemy.x + 16, y: enemy.y + 16, width: 2, height: 2, angle: angle});
+                bullets.push({x: enemy.x + 16, y: enemy.y + 16, width: 2, height: 2, angle: angle, prevX: 0, prevY: 0});
             }
 
             //drawBullets();

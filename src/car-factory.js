@@ -24,7 +24,8 @@ var playerCar = { cost: 1000, maxWeight: 5000, currentWeight: 0, maxSpace: 100, 
     currentJob: null, name: null,
     body: Body.SUBCOMPACT, chassis: LightChassis, fusionEngine: SmallEngine , tires: StandardTires,
     weaponFront: Weapon.NONE, weaponBack: Weapon.NONE, weaponLeft: Weapon.NONE, weaponRight: Weapon.NONE,
-    weaponTop: Weapon.NONE };
+    weaponTop: Weapon.NONE,
+    frontArmor: 200, backArmor: 200, leftArmor: 200, rightArmor: 200 };
 
 function Car(car) {
     this.cost = car.cost;
@@ -44,6 +45,10 @@ function Car(car) {
     this.weaponLeft = car.weaponLeft;
     this.weaponRight = car.weaponRight;
     this.weaponTop = car.weaponTop;
+    this.frontArmor = car.frontArmor;
+    this.backArmor = car.backArmor;
+    this.leftArmor = car.leftArmor;
+    this.rightArmor = car.rightArmor;
 }
 
 var tempCar;

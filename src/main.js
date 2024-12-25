@@ -10,6 +10,7 @@ ctx.textAlign = 'center';
 var titleX = canvas.width / 2;
 var titleY = canvas.height / 2;
 
+var gameOver = false;
 var inRestStop = false;
 var inTransition = false;
 var inFactory = false;
@@ -31,7 +32,7 @@ let spriteX = (canvas.width / 2) + 100;
 let spriteY = canvas.height / 2;
 let speed = 10;
 
-var player = { money: 10000, xp: 0, speed: 5, x: spriteX, y: spriteY, hasCar: false, car: null };
+var player = { money: 10000, xp: 0, health: 100, speed: 5, x: spriteX, y: spriteY, hasCar: false, car: null };
 //var offsetPos = spritePositionToImagePosition(1, 0);
 
 let carSaveError = false;
