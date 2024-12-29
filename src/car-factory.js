@@ -21,7 +21,7 @@ var costLocation = { x: 0, y: 0 };
 var moneyLocation = { x: 0, y: 0 };
 
 var playerCar = { cost: 1000, maxWeight: 5000, currentWeight: 0, maxSpace: 100, currentSpace: 10, topSpeed: 50,
-    currentJob: null, name: null,
+    currentJob: null, name: null, direction: Direction.NORTH,
     body: Body.SUBCOMPACT, chassis: LightChassis, fusionEngine: SmallEngine , tires: StandardTires,
     weaponFront: Weapon.NONE, weaponBack: Weapon.NONE, weaponLeft: Weapon.NONE, weaponRight: Weapon.NONE,
     weaponTop: Weapon.NONE,
@@ -49,6 +49,7 @@ function Car(car) {
     this.backArmor = car.backArmor;
     this.leftArmor = car.leftArmor;
     this.rightArmor = car.rightArmor;
+    this.direction = car.direction;
 }
 
 var tempCar;
@@ -146,7 +147,7 @@ function handleCanvasClick(event) {
         spriteY -= 40;
         document.removeEventListener('click', handleCanvasClick);
         document.removeEventListener('keydown', handleKeyDown);
-        document.addEventListener('keydown', moveSprite);
+        document.addEventListener('keydown', processPlayerInput);
     }
 
     if (x >= saveBox.x && x <= saveBox.x + saveBox.width && y >= saveBox.y && y <= saveBox.y + saveBox.height) {
@@ -159,6 +160,7 @@ function handleCanvasClick(event) {
         storeCarInGarage();
 
         tempCar.name = carNameText;
+        tempCar.direction = Direction.NORTH;
         playerCar = tempCar;
         player.car = new Car(tempCar);
 
@@ -173,7 +175,7 @@ function handleCanvasClick(event) {
         spriteY -= 40;
         document.removeEventListener('click', handleCanvasClick);
         document.removeEventListener('keydown', handleKeyDown);
-        document.addEventListener('keydown', moveSprite);
+        document.addEventListener('keydown', processPlayerInput);
     }
 
     //drawInputBox();

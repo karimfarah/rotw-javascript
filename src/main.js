@@ -52,7 +52,7 @@ var currentRoad = Road.NONE;
 var cameraX = 0;
 var cameraY = 0;
 
-document.addEventListener('keydown', moveSprite);
+document.addEventListener('keydown', processPlayerInput);
 
 
 ////////////////////////////////////////////////////////////////////////

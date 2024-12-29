@@ -31,7 +31,7 @@ function checkDenverLocations() {
 
 function enterGarage() {
     console.log("Entering Garage");
-    document.removeEventListener('keydown', moveSprite)
+    document.removeEventListener('keydown', processPlayerInput)
     document.addEventListener('keydown', readGarageInput);
     //canvas.addEventListener('click', handleCanvasClick);
     inGarage = true;
@@ -39,7 +39,7 @@ function enterGarage() {
 
 function enterDustRunners() {
     console.log("Entering Dust Runners");
-    document.removeEventListener('keydown', moveSprite)
+    document.removeEventListener('keydown', processPlayerInput)
     document.addEventListener('keydown', readDenverDustRunnersInput);
     //canvas.addEventListener('click', handleCanvasClick);
     inDustRunners = true;
@@ -47,7 +47,7 @@ function enterDustRunners() {
 
 function enterDenverRestStop() {
     console.log("Entering Rest Stop");
-    document.removeEventListener('keydown', moveSprite)
+    document.removeEventListener('keydown', processPlayerInput)
     document.addEventListener('keydown', readDenverRestStopInput);
     //canvas.addEventListener('click', handleCanvasClick);
     inRestStop = true;
@@ -55,7 +55,7 @@ function enterDenverRestStop() {
 
 function enterDenverFactory() {
     console.log("Entering Factory");
-    document.removeEventListener('keydown', moveSprite)
+    document.removeEventListener('keydown', processPlayerInput)
     //document.addEventListener('click', readDenverFactoryInput);
     document.addEventListener('click', handleCanvasClick);
     document.addEventListener('keydown', handleKeyDown);
@@ -83,7 +83,7 @@ function readDenverRestStopInput(e) {
             inRestStop = false;
             spriteX -= 20;
             document.removeEventListener('keydown', readDenverRestStopInput);
-            document.addEventListener('keydown', moveSprite);
+            document.addEventListener('keydown', processPlayerInput);
             break;
     }
 }
@@ -92,7 +92,7 @@ function exitGarage() {
     inGarage = false;
     spriteX -= 20;
     document.removeEventListener('keydown', readGarageInput);
-    document.addEventListener('keydown', moveSprite);
+    document.addEventListener('keydown', processPlayerInput);
 }
 
 function readGarageInput(e) {
@@ -253,7 +253,7 @@ function readDenverDustRunnersInput(e) {
             inDustRunners = false;
             spriteY -= 20;
             document.removeEventListener('keydown', readDenverDustRunnersInput);
-            document.addEventListener('keydown', moveSprite);
+            document.addEventListener('keydown', processPlayerInput);
             break;
         default:
             break;

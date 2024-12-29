@@ -21,8 +21,9 @@ function drawDroppedItems() {
 }
 
 function drawBullets() {
-    ctx.fillStyle = 'red';
+
     bullets.forEach((bullet, index) => {
+        ctx.fillStyle = bullet.color;
 
         angle = bullet.angle;
 
@@ -57,10 +58,12 @@ function drawBullets() {
 
         ctx.fillRect(bullet.x - cameraX + (canvas.width/2), bullet.y - cameraY + (canvas.height/2), bullet.width, bullet.height);
 
-        if(playerImpact(bullet)) {
+        if(bullet.isEnemyBullet && playerImpact(bullet)) {
             ctx.fillRect(bullet.x - cameraX + (canvas.width/2), bullet.y - cameraY + (canvas.height/2), bullet.width*5, bullet.height*5);
             calculatePlayerDamage(bullet);
             bullets.splice(index, 1);
+        } else if(bullet.isEnemyBullet === false) {
+            enemyImpact(bullet);
         }
     });
 }
@@ -70,6 +73,23 @@ function playerImpact(bullet) {
     if(distance < 16) {
         return true;
     }
+
+    return false;
+}
+
+function enemyImpact(bullet) {
+    enemyArray.forEach((enemy, index) => {
+        let distance = Math.sqrt((bullet.x - (enemy.x + 16)) ** 2 + (bullet.y - (enemy.y + 16)) ** 2);
+        if (distance < 16) {
+            enemy.hp -= 1;
+            ctx.fillRect(bullet.x - cameraX + (canvas.width/2), bullet.y - cameraY + (canvas.height/2), bullet.width*5, bullet.height*5);
+            if(enemy.hp < 0) {
+                droppedItems.push({x: bullet.x, y: bullet.y, src: '/src/img/enemy-destroyed.png'});
+                enemyArray.splice(index, 1);
+            }
+            return true;
+        }
+    });
 
     return false;
 }
@@ -204,9 +224,9 @@ function enemyAction(playerX, playerY, enemy) {
                 enemy.carSprite.src = '/src/img/maroon-racer-lower-left.png';
             }
 
-            if(playerX <= enemy.x + 200 && playerX >= enemy.x - 200 &&
-                playerY <= enemy.y + 150 && playerY >= enemy.y - 150) {
-                bullets.push({x: enemy.x + 16, y: enemy.y + 16, width: 2, height: 2, angle: angle, prevX: 0, prevY: 0});
+            if(playerX <= enemy.x + 400 && playerX >= enemy.x - 400 &&
+                playerY <= enemy.y + 300 && playerY >= enemy.y - 300) {
+                bullets.push({x: enemy.x + 16, y: enemy.y + 16, width: 2, height: 2, angle: angle, prevX: 0, prevY: 0, color: 'red', isEnemyBullet: true});
             }
 
             //drawBullets();

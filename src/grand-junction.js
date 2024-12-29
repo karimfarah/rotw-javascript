@@ -17,7 +17,7 @@ function checkGrandJunctionLocations() {
 
 function enterGrandJunctionRestStop() {
     console.log("Entering Rest Stop");
-    document.removeEventListener('keydown', moveSprite);
+    document.removeEventListener('keydown', processPlayerInput);
     document.addEventListener('keydown', readGrandJunctionRestStopInput);
     inRestStop = true;
 }
@@ -46,7 +46,7 @@ function readGrandJunctionRestStopInput(e) {
             inRestStop = false;
             spriteX += 20;
             document.removeEventListener('keydown', readGrandJunctionRestStopInput);
-            document.addEventListener('keydown', moveSprite);
+            document.addEventListener('keydown', processPlayerInput);
             break;
     }
 }

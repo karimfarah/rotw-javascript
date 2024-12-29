@@ -61,21 +61,21 @@ function readLasVegasRestStopInput(e) {
             inRestStop = false;
             spriteY += 20;
             document.removeEventListener('keydown', readLasVegasRestStopInput);
-            document.addEventListener('keydown', moveSprite);
+            document.addEventListener('keydown', processPlayerInput);
             break;
     }
 }
 
 function enterLasVegasRestStop() {
     console.log("Entering Rest Stop");
-    document.removeEventListener('keydown', moveSprite);
+    document.removeEventListener('keydown', processPlayerInput);
     document.addEventListener('keydown', readLasVegasRestStopInput);
     inRestStop = true;
 }
 
 function enterCasino() {
     console.log("Entering Casino");
-    document.removeEventListener('keydown', moveSprite)
+    document.removeEventListener('keydown', processPlayerInput)
     //document.addEventListener('click', handleCasinoCanvasClick);
     document.addEventListener('click', handleCasinoCanvasClick);
     document.addEventListener('keydown', handleCasinoKeyDown);
@@ -224,7 +224,7 @@ async function handleCasinoCanvasClick(event) {
         spriteX += 40;
         document.removeEventListener('click', handleCasinoCanvasClick);
         document.removeEventListener('keydown', handleCasinoKeyDown);
-        document.addEventListener('keydown', moveSprite);
+        document.addEventListener('keydown', processPlayerInput);
     }
 
     if (x >= spinBox.x && x <= spinBox.x + spinBox.width && y >= spinBox.y && y <= spinBox.y + spinBox.height) {

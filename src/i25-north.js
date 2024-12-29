@@ -16,7 +16,7 @@ function enterI25North(camX, camY) {
 
     /** Create enemy vehicles **/
         //var enemy;
-    var enemy = { speed: 10, x: 0, y: 0, car: null, carSprite: null, prevX: 0, prevY: 0, moves: 0, isReversing: false, reverseCount: 0 };
+    var enemy = { speed: 10, hp: 100, x: 0, y: 0, car: null, carSprite: null, prevX: 0, prevY: 0, moves: 0, isReversing: false, reverseCount: 0 };
     enemy.carSprite = new Image();
     enemy.carSprite.src = '/src/img/maroon-racer-down.png';
     enemy.speed = 2;
@@ -24,7 +24,7 @@ function enterI25North(camX, camY) {
     enemy.y = 4210;
     enemyArray.push(enemy);
 
-    var enemy2 = { speed: 10, x: 0, y: 0, car: null, carSprite: null, prevX: 0, prevY: 0, moves: 0, isReversing: false, reverseCount: 0 };
+    var enemy2 = { speed: 10,hp: 100, x: 0, y: 0, car: null, carSprite: null, prevX: 0, prevY: 0, moves: 0, isReversing: false, reverseCount: 0 };
     enemy2.carSprite = new Image();
     enemy2.carSprite.src = '/src/img/maroon-racer-down.png';
     enemy2.speed = 2;
@@ -33,7 +33,7 @@ function enterI25North(camX, camY) {
 
     //enemyArray.push(enemy2);
 
-    var enemy3 = { speed: 10, x: 0, y: 0, car: null, carSprite: null, prevX: 0, prevY: 0, moves: 0, isReversing: false, reverseCount: 0 };
+    var enemy3 = { speed: 10, hp: 100, x: 0, y: 0, car: null, carSprite: null, prevX: 0, prevY: 0, moves: 0, isReversing: false, reverseCount: 0 };
     enemy3.carSprite = new Image();
     enemy3.carSprite.src = '/src/img/maroon-racer-down.png';
     enemy3.speed = 2;

@@ -19,7 +19,7 @@ function checkCheyenneLocations() {
 
 function enterCheyenneDustRunners() {
     console.log("Entering Dust Runners");
-    document.removeEventListener('keydown', moveSprite)
+    document.removeEventListener('keydown', processPlayerInput)
     document.addEventListener('keydown', readCheyenneDustRunnersInput);
     //canvas.addEventListener('click', handleCanvasClick);
     inDustRunners = true;
@@ -30,7 +30,7 @@ function enterCheyenneRestStop() {
 
     deliverJob(City.CHEYENNE, Building.REST_STOP);
 
-    document.removeEventListener('keydown', moveSprite);
+    document.removeEventListener('keydown', processPlayerInput);
     document.addEventListener('keydown', readCheyenneRestStopInput);
     inRestStop = true;
 }
@@ -40,7 +40,7 @@ function enterCheyenneGarage() {
 
     deliverJob(City.CHEYENNE, Building.GARAGE);
 
-    document.removeEventListener('keydown', moveSprite);
+    document.removeEventListener('keydown', processPlayerInput);
     document.addEventListener('keydown', readCheyenneRestStopInput);
     inRestStop = true;
 }
@@ -56,7 +56,7 @@ function readCheyenneRestStopInput(e) {
             inRestStop = false;
             spriteX -= 20;
             document.removeEventListener('keydown', readCheyenneRestStopInput);
-            document.addEventListener('keydown', moveSprite);
+            document.addEventListener('keydown', processPlayerInput);
             break;
     }
 }
@@ -83,7 +83,7 @@ function readCheyenneDustRunnersInput(e) {
             inDustRunners = false;
             spriteX -= 20;
             document.removeEventListener('keydown', readCheyenneDustRunnersInput);
-            document.addEventListener('keydown', moveSprite);
+            document.addEventListener('keydown', processPlayerInput);
             break;
         default:
             break;
