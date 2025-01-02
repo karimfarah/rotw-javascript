@@ -118,7 +118,7 @@ function moveSprite(e) {
 
         }
 
-        console.log(spriteX + ", " + spriteY);
+        console.log(cameraX + ", " + cameraY);
         checkPlayerLocation();
     }
 

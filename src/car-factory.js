@@ -487,8 +487,9 @@ function drawBuildCarMenu() {
     text = '[' + tempCar.weaponTop.NAME + ']';
     ctx.fillText(text, weaponTopOptionLocation.x, weaponTopOptionLocation.y);
 
-    text = '[' + tempCar.armorFront + ']';
-    ctx.fillText(text, armorInputX, armorInputY); armorInputX += 25;
+    /* TODO Car Armor */
+    //text = '[' + tempCar.armorFront + ']';
+    //ctx.fillText(text, armorInputX, armorInputY); armorInputX += 25;
 
     /** DERIVED VALUES FROM USER INPUT **/
     ctx.fillStyle = '#FFFFFF';
