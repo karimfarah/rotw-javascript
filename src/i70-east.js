@@ -50,8 +50,8 @@ function checkI70EastLocations() {
         spriteX = 40;
         spriteY = 300;
         currentRoad = Road.NONE;
-        currentCity = City.DENVER;
-        townBackground.src= denverBackground.src;
+        currentCity = City.KANSAS_CITY;
+        townBackground.src= kansasCityBackground.src;
 
     } else if (cameraX <= 0 && cameraY >= 1230 &&
         cameraY <= 1430) {

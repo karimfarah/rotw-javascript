@@ -46,6 +46,19 @@ function drawRestStopMenu() {
             text = '    4. Denver --> Grand Junction 200qc';
             ctx.fillText(text, textX, textY); textY += 50;
             break;
+        case City.KANSAS_CITY:
+            text = '    1. Kansas City --> Denver 200qc';
+            ctx.fillText(text, textX, textY);
+            textY += 25;
+            text = '    2. Kansas City --> Des Moines 200qc';
+            ctx.fillText(text, textX, textY);
+            textY += 25;
+            text = '    3. Kansas City --> St. Louis 200qc';
+            ctx.fillText(text, textX, textY);
+            textY += 25;
+            text = '    4. Kansas City --> Oklahoma City 200qc';
+            ctx.fillText(text, textX, textY); textY += 50;
+            break;
         case City.SANTE_FE:
             text = '    1. Sante Fe --> Denver 200qc';
             ctx.fillText(text, textX, textY);
@@ -90,6 +103,27 @@ function drawRestStopMenu() {
             break;
         case City.BILLINGS:
             text = '    1. Billings --> Cheyenne 200qc';
+            ctx.fillText(text, textX, textY);
+            textY += 50;
+            break;
+        case City.DES_MOINES:
+            text = '    1. Des Moines --> Kansas City 200qc';
+            ctx.fillText(text, textX, textY);
+            textY += 25;
+            text = '    2. Des Moines --> Chicago 200qc';
+            ctx.fillText(text, textX, textY);
+            textY += 50;
+            break;
+        case City.CHICAGO:
+            text = '    1. Chicago --> Des Moines 200qc';
+            ctx.fillText(text, textX, textY);
+            textY += 25;
+            text = '    2. Chicago --> New York City 200qc';
+            ctx.fillText(text, textX, textY);
+            textY += 50;
+            break;
+        case City.NEW_YORK_CITY:
+            text = '    1. New York City --> Chicago 200qc';
             ctx.fillText(text, textX, textY);
             textY += 50;
             break;

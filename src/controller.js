@@ -119,6 +119,7 @@ function moveSprite(e) {
         }
 
         console.log(cameraX + ", " + cameraY);
+        console.log(spriteX + ", " + spriteY);
         checkPlayerLocation();
     }
 
@@ -142,6 +143,18 @@ function checkPlayerLocation() {
             case City.SANTE_FE:
                 checkSanteFeLocations();
                 break;
+            case City.KANSAS_CITY:
+                checkKansasCityLocations();
+                break;
+            case City.DES_MOINES:
+                checkDesMoinesLocations();
+                break;
+            case City.CHICAGO:
+                checkChicagoLocations();
+                break;
+            case City.NEW_YORK_CITY:
+                checkNewYorkCityLocations();
+                break;
         }
     } else {
         switch (currentRoad) {
@@ -159,6 +172,9 @@ function checkPlayerLocation() {
                 break;
             case Road.I15_SOUTH:
                 checkI15SouthLocations();
+                break;
+            case Road.I35_NORTH:
+                checkI35NorthLocations();
                 break;
         }
     }
@@ -190,7 +206,7 @@ async function loadCityChanges(cityLocation) {
             spriteY = 260;
 
             inRestStop = false;
-            townBackground.src= denverBackground.src;
+            townBackground.src = denverBackground.src;
             document.removeEventListener('keydown', readDenverRestStopInput);
             document.removeEventListener('keydown', readCheyenneRestStopInput);
             document.removeEventListener('keydown', readGrandJunctionRestStopInput);
@@ -203,7 +219,7 @@ async function loadCityChanges(cityLocation) {
             spriteY = 200;
 
             inRestStop = false;
-            townBackground.src= cheyenneBackground.src;
+            townBackground.src = cheyenneBackground.src;
             document.removeEventListener('keydown', readDenverRestStopInput);
             document.removeEventListener('keydown', readCheyenneRestStopInput);
             document.addEventListener('keydown', processPlayerInput);
@@ -215,7 +231,7 @@ async function loadCityChanges(cityLocation) {
             spriteY = 260;
 
             inRestStop = false;
-            townBackground.src= grandJunctionBackground.src;
+            townBackground.src = grandJunctionBackground.src;
             document.removeEventListener('keydown', readCheyenneRestStopInput);
             document.addEventListener('keydown', processPlayerInput);
             break;
@@ -226,7 +242,7 @@ async function loadCityChanges(cityLocation) {
             spriteY = 240;
 
             inRestStop = false;
-            townBackground.src= lasVegasBackground.src;
+            townBackground.src = lasVegasBackground.src;
             document.removeEventListener('keydown', readLasVegasRestStopInput);
             document.addEventListener('keydown', processPlayerInput);
             break;
@@ -237,7 +253,51 @@ async function loadCityChanges(cityLocation) {
             spriteY = 400;
 
             inRestStop = false;
-            townBackground.src= santeFeBackground.src;
+            townBackground.src = santeFeBackground.src;
+            removeAllRestStopInputListeners();
+            document.addEventListener('keydown', processPlayerInput);
+            break;
+        case City.KANSAS_CITY:
+            await sleep(4000);
+
+            spriteX = 190;
+            spriteY = 350;
+
+            inRestStop = false;
+            townBackground.src = kansasCityBackground.src;
+            removeAllRestStopInputListeners();
+            document.addEventListener('keydown', processPlayerInput);
+            break;
+        case City.DES_MOINES:
+            await sleep(4000);
+
+            spriteX = 415;
+            spriteY = 265;
+
+            inRestStop = false;
+            townBackground.src = desMoinesBackground.src;
+            removeAllRestStopInputListeners();
+            document.addEventListener('keydown', processPlayerInput);
+            break;
+        case City.CHICAGO:
+            await sleep(4000);
+
+            spriteX = 125;
+            spriteY = 235;
+
+            inRestStop = false;
+            townBackground.src = chicagoBackground.src;
+            removeAllRestStopInputListeners();
+            document.addEventListener('keydown', processPlayerInput);
+            break;
+        case City.NEW_YORK_CITY:
+            await sleep(4000);
+
+            spriteX = 550;
+            spriteY = 150;
+
+            inRestStop = false;
+            townBackground.src = newYorkCityBackground.src;
             removeAllRestStopInputListeners();
             document.addEventListener('keydown', processPlayerInput);
             break;
@@ -249,6 +309,7 @@ async function loadCityChanges(cityLocation) {
 function removeAllRestStopInputListeners() {
     document.removeEventListener('keydown', readDenverRestStopInput);
     document.removeEventListener('keydown', readCheyenneRestStopInput);
+    document.removeEventListener('keydown', readChicagoRestStopInput);
     document.removeEventListener('keydown', readGrandJunctionRestStopInput);
     document.removeEventListener('keydown', readSanteFeRestStopInput);
 }

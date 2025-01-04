@@ -69,14 +69,6 @@ async function drawTransitionMenu() {
             case City.LAS_VEGAS:
                 travelImg.src = '/src/img/travel-lasvegas-day.png';
 
-                /*
-                                if(getRandomInt(1,2) === 1) {
-                                    travelImg.src += '-day.png';
-                                } else {
-                                    travelImg.src += '-night.png';
-                                }
-                */
-
                 ctx.drawImage(travelImg, popUpX, popUpY, popUpWidth, popUpHeight);
                 ctx.font = '20px Verdana';
                 ctx.fillStyle = 'white';
@@ -110,6 +102,106 @@ async function drawTransitionMenu() {
                 textY += 25;
 
                 text = '(Your ride was bumpy)';
+                ctx.fillText(text, textX, textY);
+                textY += 25;
+
+                break;
+            case City.KANSAS_CITY:
+                travelImg.src = '/src/img/travel-kansascity-night.png';
+
+                ctx.drawImage(travelImg, popUpX, popUpY, popUpWidth, popUpHeight);
+                ctx.font = '20px Verdana';
+                ctx.fillStyle = 'white';
+                ctx.textAlign = 'left';
+
+                var textX = popUpX + 100;
+                var textY = popUpY + 250;
+
+                var text = '...Traveling to Kansas City...';
+                ctx.fillText(text, textX, textY);
+                textY += 25;
+
+                text = '(Your ride was absolutely uneventful)';
+                ctx.fillText(text, textX, textY);
+                textY += 25;
+
+                break;
+            case City.DES_MOINES:
+                travelImg.src = '/src/img/travel-desmoines.png';
+
+                ctx.drawImage(travelImg, popUpX, popUpY, popUpWidth, popUpHeight);
+                ctx.font = '20px Verdana';
+                ctx.fillStyle = 'white';
+                ctx.textAlign = 'left';
+
+                var textX = popUpX + 100;
+                var textY = popUpY + 250;
+
+                var text = '...Traveling to Des Moines...';
+                ctx.fillText(text, textX, textY);
+                textY += 25;
+
+                text = '(Your ride was uneventful)';
+                ctx.fillText(text, textX, textY);
+                textY += 25;
+
+                break;
+            case City.CHICAGO:
+                travelImg.src = '/src/img/travel-chicago.png';
+
+                ctx.drawImage(travelImg, popUpX, popUpY, popUpWidth, popUpHeight);
+                ctx.font = '20px Verdana';
+                ctx.fillStyle = 'white';
+                ctx.textAlign = 'left';
+
+                var textX = popUpX + 100;
+                var textY = popUpY + 250;
+
+                var text = '...Traveling to Chicago...';
+                ctx.fillText(text, textX, textY);
+                textY += 25;
+
+                text = '(Your ride was a little windy)';
+                ctx.fillText(text, textX, textY);
+                textY += 25;
+
+                break;
+            case City.NEW_YORK_CITY:
+                travelImg.src = '/src/img/travel-newyorkcity.png';
+
+                ctx.drawImage(travelImg, popUpX, popUpY, popUpWidth, popUpHeight);
+                ctx.font = '20px Verdana';
+                ctx.fillStyle = 'white';
+                ctx.textAlign = 'left';
+
+                var textX = popUpX + 100;
+                var textY = popUpY + 250;
+
+                var text = '...Traveling to New York City...';
+                ctx.fillText(text, textX, textY);
+                textY += 25;
+
+                text = '(Your ride was nostalgic)';
+                ctx.fillText(text, textX, textY);
+                textY += 25;
+
+                break;
+            default:
+                //travelImg.src = '/src/img/travel-desmoines.png';
+
+                //ctx.drawImage(travelImg, popUpX, popUpY, popUpWidth, popUpHeight);
+                ctx.font = '20px Verdana';
+                ctx.fillStyle = 'white';
+                ctx.textAlign = 'left';
+
+                var textX = popUpX + 100;
+                var textY = popUpY + 150;
+
+                var text = '...Traveling to ' + currentCity + '...';
+                ctx.fillText(text, textX, textY);
+                textY += 25;
+
+                text = '(Your ride was...interesting)';
                 ctx.fillText(text, textX, textY);
                 textY += 25;
 

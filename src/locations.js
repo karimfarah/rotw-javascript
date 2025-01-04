@@ -9,13 +9,14 @@ const City = Object.freeze({
     SALT_LAKE_CITY: 'Salt Lake City',
     BOISE: 'Boise',
     BILLINGS: 'Billings',
-    DES_MOINE: 'Des Moine',
+    DES_MOINES: 'Des Moines',
     CHICAGO: 'Chicago',
     ST_LOUIS: 'St Louis',
     OKLAHOMA_CITY: 'Oklahoma Vity',
     LITTLE_ROCK: 'Little Rock',
     ARLINGTON: 'Arlington',
     NEW_ORLEANS: 'New Orleans',
+    NEW_YORK_CITY: 'New York City', // easter egg city
     NONE: 'none'
 });
 
@@ -40,5 +41,8 @@ const Road = Object.freeze({
     I15_SOUTH: 'i15 north',
     I15_NORTH: 'i15 south',
     I84_NORTH: 'i84 north',
+    I35_NORTH: 'i35 north',
+    I35_SOUTH: 'i35 south',
+    I80_EAST: 'i80 east',
     NONE: 'none'
 });
