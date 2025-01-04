@@ -39,7 +39,6 @@ let carSaveError = false;
 
 let enemyArray = [];
 
-
 /** STARTING TOWN **/
 const townBackground = new Image();
 townBackground.src = denverBackground.src; // replace with your town background image path

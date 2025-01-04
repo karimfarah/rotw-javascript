@@ -139,14 +139,23 @@ function checkPlayerLocation() {
             case City.LAS_VEGAS:
                 checkLasVegasLocations();
                 break;
+            case City.SANTE_FE:
+                checkSanteFeLocations();
+                break;
         }
     } else {
         switch (currentRoad) {
             case Road.I25_NORTH:
                 checkI25NorthLocations();
                 break;
+            case Road.I25_SOUTH:
+                checkI25SouthLocations();
+                break;
             case Road.I70_WEST:
                 checkI70WestLocations();
+                break;
+            case Road.I70_EAST:
+                checkI70EastLocations();
                 break;
             case Road.I15_SOUTH:
                 checkI15SouthLocations();
@@ -221,7 +230,25 @@ async function loadCityChanges(cityLocation) {
             document.removeEventListener('keydown', readLasVegasRestStopInput);
             document.addEventListener('keydown', processPlayerInput);
             break;
+        case City.SANTE_FE:
+            await sleep(4000);
+
+            spriteX = 70;
+            spriteY = 400;
+
+            inRestStop = false;
+            townBackground.src= santeFeBackground.src;
+            removeAllRestStopInputListeners();
+            document.addEventListener('keydown', processPlayerInput);
+            break;
     }
 
     inTransition = false;
+}
+
+function removeAllRestStopInputListeners() {
+    document.removeEventListener('keydown', readDenverRestStopInput);
+    document.removeEventListener('keydown', readCheyenneRestStopInput);
+    document.removeEventListener('keydown', readGrandJunctionRestStopInput);
+    document.removeEventListener('keydown', readSanteFeRestStopInput);
 }

@@ -22,10 +22,15 @@ function checkDenverLocations() {
         spriteY <= 10) {
         /** NORTH EXIT **/
         enterI25North(1220, 4510);
-    } else if(spriteX <= 10 && spriteY >= 200 &&
-        spriteY <= 400) {
+    } else if(spriteX <= 10) {
         /** NORTH EXIT **/
         enterI70West(4310, 1350);
+    } else if(spriteX >= 780) {
+        /** NORTH EXIT **/
+        enterI70East(100, 1350);
+    } else if(spriteY >= 580) {
+        /** NORTH EXIT **/
+        enterI25South(1220, 125);
     }
 }
 
@@ -70,6 +75,20 @@ function readDenverRestStopInput(e) {
             document.removeEventListener('keydown', readDenverRestStopInput);
             storeCarInGarage();
             loadCityChanges(City.CHEYENNE);
+            break;
+        case '2':
+            inRestStop = false;
+            player.money -= 200;
+            document.removeEventListener('keydown', readDenverRestStopInput);
+            storeCarInGarage();
+            loadCityChanges(City.SANTE_FE);
+            break;
+        case '3':
+            inRestStop = false;
+            player.money -= 200;
+            document.removeEventListener('keydown', readDenverRestStopInput);
+            storeCarInGarage();
+            loadCityChanges(City.KANSAS_CITY);
             break;
         case '4':
             inRestStop = false;

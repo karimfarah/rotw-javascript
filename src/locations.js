@@ -36,7 +36,7 @@ const Road = Object.freeze({
     I25_NORTH: 'i25 north',
     I25_SOUTH: 'i25 south',
     I70_WEST: 'i70 west',
-    I70_EAST: 'i70 west',
+    I70_EAST: 'i70 east',
     I15_SOUTH: 'i15 north',
     I15_NORTH: 'i15 south',
     I84_NORTH: 'i84 north',

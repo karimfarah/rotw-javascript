@@ -3,6 +3,21 @@ let bulletSpeed = 5;
 
 let droppedItems = [];
 
+function Enemy(enemy) {
+    this.speed = enemy.speed;
+    this.hp = enemy.hp;
+    this.x = enemy.x;
+    this.y = enemy.y;
+    this.car = enemy.car;
+    this.color = enemy.color;
+    this.carSprite = enemy.carSprite;
+    this.prevX = enemy.prevX;
+    this.prevY = enemy.prevY;
+    this.moves = enemy.moves;
+    this.isReversing = enemy.isReversing;
+    this.reverseCount = enemy.reverseCount;
+}
+
 function calculateAngle(x1, y1, x2, y2) {
     const deltaX = x2 - x1;
     const deltaY = y2 - y1;
@@ -207,21 +222,21 @@ function enemyAction(playerX, playerY, enemy) {
             let angle = calculateAngle(enemy.x, enemy.y, enemy.prevX, enemy.prevY);
             //console.log("angle: " + angle);
             if(angle >= -22.5 && angle <= 22.5) {
-                enemy.carSprite.src = '/src/img/maroon-racer-left.png';
+                enemy.carSprite.src = '/src/img/'+enemy.color+'-racer-left.png';
             } else if(angle >= 22.5 && angle <= 67.5) {
-                enemy.carSprite.src = '/src/img/maroon-racer-upper-left.png';
+                enemy.carSprite.src = '/src/img/'+enemy.color+'-racer-upper-left.png';
             } else if(angle >= 67.5 && angle <= 112.5) {
-                enemy.carSprite.src = '/src/img/maroon-racer-forward.png';
+                enemy.carSprite.src = '/src/img/'+enemy.color+'-racer-forward.png';
             } else if(angle >= 112.5 && angle <= 157.5) {
-                enemy.carSprite.src = '/src/img/maroon-racer-upper-right.png';
+                enemy.carSprite.src = '/src/img/'+enemy.color+'-racer-upper-right.png';
             } else if((angle >= 157.5 && angle <= 180) || (angle >= -180 && angle <= -157.5)) {
-                enemy.carSprite.src = '/src/img/maroon-racer-right.png';
+                enemy.carSprite.src = '/src/img/'+enemy.color+'-racer-right.png';
             } else if(angle >= -157.5 && angle <= -112.5) {
-                enemy.carSprite.src = '/src/img/maroon-racer-lower-right.png';
+                enemy.carSprite.src = '/src/img/'+enemy.color+'-racer-lower-right.png';
             } else if(angle >= -112.5 && angle <= -67.5) {
-                enemy.carSprite.src = '/src/img/maroon-racer-down.png';
+                enemy.carSprite.src = '/src/img/'+enemy.color+'-racer-down.png';
             } else if(angle >= -67.5 && angle <= -22.5) {
-                enemy.carSprite.src = '/src/img/maroon-racer-lower-left.png';
+                enemy.carSprite.src = '/src/img/'+enemy.color+'-racer-lower-left.png';
             }
 
             if(playerX <= enemy.x + 400 && playerX >= enemy.x - 400 &&
