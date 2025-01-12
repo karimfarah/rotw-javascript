@@ -9,14 +9,6 @@ function checkNewYorkCityLocations() {
     }
 }
 
-function enterGarage() {
-    console.log("Entering Garage");
-    document.removeEventListener('keydown', processPlayerInput)
-    document.addEventListener('keydown', readGarageInput);
-    //canvas.addEventListener('click', handleCanvasClick);
-    inGarage = true;
-}
-
 function enterDustRunners() {
     console.log("Entering Dust Runners");
     document.removeEventListener('keydown', processPlayerInput)
@@ -31,15 +23,6 @@ function enterNewYorkCityRestStop() {
     document.addEventListener('keydown', readNewYorkCityRestStopInput);
     //canvas.addEventListener('click', handleCanvasClick);
     inRestStop = true;
-}
-
-function enterDenverFactory() {
-    console.log("Entering Factory");
-    document.removeEventListener('keydown', processPlayerInput)
-    //document.addEventListener('click', readDenverFactoryInput);
-    document.addEventListener('click', handleCanvasClick);
-    document.addEventListener('keydown', handleKeyDown);
-    inFactory = true;
 }
 
 function readNewYorkCityRestStopInput(e) {

@@ -35,16 +35,6 @@ function enterCheyenneRestStop() {
     inRestStop = true;
 }
 
-function enterCheyenneGarage() {
-    console.log("Entering Garage");
-
-    deliverJob(City.CHEYENNE, Building.GARAGE);
-
-    document.removeEventListener('keydown', processPlayerInput);
-    document.addEventListener('keydown', readCheyenneRestStopInput);
-    inRestStop = true;
-}
-
 function readCheyenneRestStopInput(e) {
     switch (e.key) {
         case '1':

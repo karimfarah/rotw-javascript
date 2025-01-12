@@ -14,13 +14,12 @@ function checkKansasCityLocations() {
         spriteY >= 220 && spriteY <= 240) {
         /** GARAGE **/
         enterGarage();
-    } else if(spriteX >= 340 && spriteY <= 420 &&
-        spriteY <= 10) {
+    } else if(spriteY <= 10) {
         /** NORTH EXIT **/
         enterI35North(1220, 4510);
     } else if(spriteX <= 10) {
         /** NORTH EXIT **/
-        enterI70East(100, 1350);
+        enterI70East(4310, 1350);
     } else if(spriteX >= 780) {
         /** NORTH EXIT **/
         enterI70East(100, 1350);
@@ -85,52 +84,6 @@ function readKansasCityRestStopInput(e) {
             document.addEventListener('keydown', processPlayerInput);
             break;
     }
-}
-
-function exitGarage() {
-    inGarage = false;
-    spriteY += 20;
-    document.removeEventListener('keydown', readGarageInput);
-    document.addEventListener('keydown', processPlayerInput);
-}
-
-function readGarageInput(e) {
-    switch (e.key) {
-        case '1':
-            player.car = car1;
-            removeElementByValue(denverGarageCars,0);
-            sprite.src = '/src/img/car-sprite-left.png';
-            exitGarage();
-            break;
-        case '2':
-            player.car = car2;
-            removeElementByValue(denverGarageCars,1);
-            sprite.src = '/src/img/car-sprite-left.png';
-            exitGarage();
-            break;
-        case '3':
-            player.car = car3;
-            removeElementByValue(denverGarageCars,2);
-            sprite.src = '/src/img/car-sprite-left.png';
-            exitGarage();
-            break;
-        case '4':
-            player.car = car4;
-            removeElementByValue(denverGarageCars,3);
-            sprite.src = '/src/img/car-sprite-left.png';
-            exitGarage();
-            break;
-        case '6':
-
-            storeCarInGarage();
-
-            break;
-        case '8':
-        case 'Escape':
-            exitGarage();
-            break;
-    }
-
 }
 
 function storeCarInGarage() {

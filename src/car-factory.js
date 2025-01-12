@@ -365,6 +365,7 @@ function drawBuildCarMenu() {
     var armorX = textX + 210;
     var armorInputY = armorY;
     var armorInputX = armorX + 25;
+    /*
     text = "Armr St Bt";
     ctx.fillText(text, armorX, armorY);  armorY += 25;
     text = "F:";
@@ -375,6 +376,7 @@ function drawBuildCarMenu() {
     ctx.fillText(text, armorX, armorY);  armorY += 25;
     text = "R:";
     ctx.fillText(text, armorX, armorY);  armorY += 25;
+     */
 
     /** Box for Unchangeable Vales **/
     ctx.strokeStyle = 'black';

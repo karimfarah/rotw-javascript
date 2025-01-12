@@ -38,6 +38,7 @@ function enterI70West(camX, camY) {
 
     // start fresh no enemies from previous run
     enemyArray = [];
+    droppedItems = [];
 
     /** Create enemy vehicles **/
     var enemy = { speed: 10, hp: 100, x: 0, y: 0, car: null, carSprite: null, prevX: 0, prevY: 0, moves: 0, isReversing: false, reverseCount: 0, color: 'maroon' };

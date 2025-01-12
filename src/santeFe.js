@@ -32,15 +32,6 @@ function enterSanteFeRestStop() {
     inRestStop = true;
 }
 
-function enterDenverFactory() {
-    console.log("Entering Factory");
-    document.removeEventListener('keydown', processPlayerInput)
-    //document.addEventListener('click', readDenverFactoryInput);
-    document.addEventListener('click', handleCanvasClick);
-    document.addEventListener('keydown', handleKeyDown);
-    inFactory = true;
-}
-
 function readSanteFeRestStopInput(e) {
     switch (e.key) {
         case '1':
